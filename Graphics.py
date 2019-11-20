@@ -1,5 +1,5 @@
 import pygame
-
+import time
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
@@ -59,9 +59,41 @@ def changeGraphics(gameDisplay, component):
     for iLines in tLines:
         pygame.draw.line(gameDisplay, *lineMaster[iLines])
 
+    if component[1] is True:   # draw mash valve
+        pygame.draw.circle(gameDisplay, blue, [388, 330], 8)
+
+    if component[3] is True:   #draw boiler valve
+        pygame.draw.circle(gameDisplay, blue, [498, 424], 8)
+
+    if component[4] is True:  # draw boiler valve
+        pygame.draw.circle(gameDisplay, blue, [561, 424], 8)
+
+    if component[5] is True:  # draw boiler valve
+        pygame.draw.circle(gameDisplay, blue, [632, 423], 8)
+
+    if component[6] is True:  # draw boiler valve
+        pygame.draw.circle(gameDisplay, blue, [642, 252], 8)
 
 
+bg = pygame.image.load("barleyworksbackground2.jpg")
+pygame.init()
+pygame.display.set_caption('Barley Works')
+gameExit = False
+clock = pygame.time.Clock()
+state = True
+while state:
+            #   for event in pygame.event.get():
+            #   state = check()   if event.type ==pygame.QUIT:
+            #         gameExit = True
 
+
+    gameDisplay = pygame.display.set_mode((1002, 672))
+    gameDisplay.fill(white)
+    gameDisplay.blit(bg, (0, 0))
+    changeGraphics(gameDisplay, [True, True, True, True, True, True, True])
+    pygame.display.update()
+    time.sleep(10)
+    clock.tick(30)
 
 
 
