@@ -20,15 +20,18 @@ levelpins = (3, 35)  # Mash level is position 0, boiler level is position 1
 def setup():
     GPIO.setmode(GPIO.BCM)
     global pins
+    global levelpins
     for i in range(10):
-        GPIO.setup(pins(i), GPIO.OUT)
+        GPIO.setup(pins[i], GPIO.OUT)
     for i in range(1):
-        GPIO.setup(pins(i), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+GPIO.setmode(GPIO.BCM)
 
 
 
 def setGPIO(changeComp):
-
+    global pins
     components = []
     for i in range(7):
         print(i)
@@ -41,14 +44,16 @@ def setGPIO(changeComp):
 
     for i in range(7):
         if components[i] is True:
-            GPIO.output(pins(i), GPIO.HIGH)
+            print(" high ", i)
+            GPIO.output(pins[i], GPIO.HIGH)
         else:
-            GPIO.output(pins(i), GPIO.LO)
+            print("Low ", i)
+            GPIO.output(pins[i], GPIO.LOW)
     return components
 
 def getlevel():
     global levelpins
     level = []
-    level[0] = GPIO.input(levelpins(0))
-    level[1] = GPIO.input(levelpins(1))
+    level[0] = GPIO.input(levelpins[0])
+    level[1] = GPIO.input(levelpins[1])
     return level

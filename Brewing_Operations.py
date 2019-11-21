@@ -79,6 +79,7 @@ class Operation:
 #SETUP
 Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
+XGPIO.setup()
 loadgametest()
 
 
