@@ -74,7 +74,16 @@ def changeGraphics(gameDisplay, component):
     if component[6] is True:  # draw boiler valve
         pygame.draw.circle(gameDisplay, blue, [642, 252], 8)
 
+    if component[7] is True:  # draw bitter hopper
+        pygame.draw.rect(gameDisplay, blue, [555, 76, 23, 19])
 
+    if component[8] is True:  # draw flavor hopper
+        pygame.draw.rect(gameDisplay, blue, [580, 76, 25, 19])
+
+    if component[9] is True:  # draw aroma hopper
+        pygame.draw.rect(gameDisplay, blue, [608, 76, 25, 19])
+
+'''
 bg = pygame.image.load("barleyworksbackground2.jpg")
 pygame.init()
 pygame.display.set_caption('Barley Works')
@@ -90,10 +99,10 @@ while state:
     gameDisplay = pygame.display.set_mode((1002, 672))
     gameDisplay.fill(white)
     gameDisplay.blit(bg, (0, 0))
-    changeGraphics(gameDisplay, [True, True, True, True, True, True, True])
+    changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
     pygame.display.update()
     time.sleep(10)
     clock.tick(30)
-
+'''
 
 

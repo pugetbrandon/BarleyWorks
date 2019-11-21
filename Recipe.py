@@ -11,7 +11,7 @@ def getrecipe():
         'Recipe Name', 'Strike Temperature', 'Mash Temperature', 'Mash Time', 'Boil Time', 'Bitter Hopper',
         'Flavor Hopper',
         'Aroma Hopper', 'Ferm Temperature')
-    print("hi")
+
 
     def use_recipe(entries):
 
@@ -54,3 +54,6 @@ def getrecipe():
     recipelist.append(filterTime)
     return recipelist
 
+def gettestrecipe():
+    recipelist = ['Test Recipe', 85, 150, 1, 5, 4, 3, 2, 70, 1]
+    return recipelist

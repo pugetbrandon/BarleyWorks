@@ -27,13 +27,24 @@ def setup():
 
 
 
-def setGPIO(components):
+def setGPIO(changeComp):
+
+    components = []
+    for i in range(7):
+        print(i)
+        components.append(False)
+    for i in range(8, 10):
+        components.append(True)
+
+    for i in changeComp:
+        components[i] = True
+
     for i in range(7):
         if components[i] is True:
             GPIO.output(pins(i), GPIO.HIGH)
         else:
             GPIO.output(pins(i), GPIO.LO)
-
+    return components
 
 def getlevel():
     global levelpins

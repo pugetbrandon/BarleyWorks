@@ -28,7 +28,7 @@ def onTemperatureChangeHandler(self, temperature):
 
     return temperature
 
-def whattemp():
+def gettemp():
     global temp9
     ch2 = TemperatureSensor()
     ch2.setDeviceSerialNumber(118651)
