@@ -1,10 +1,22 @@
 import pygame
+import math
 import time
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 blue = (0, 0, 255)
 lineSize = 5
+
+degree = 0
+degreeb = 0
+x = []
+y = []
+mashpumpctr = (290, 346)
+boilerpumpctr = (708, 440)
+impeller_len = 13
+angles = (0, 72, 144, 216, 288)
+
+FPSCLOCK = pygame.time.Clock()
 
 lineMaster = []
 lineMaster.append([blue, [0, 0], [0, 0], 0])
@@ -33,7 +45,8 @@ lineMaster.append([blue, [658, 440], [658, 489], lineSize])  #cooler
 lineMaster.append([blue, [608, 440], [608, 489], lineSize])  #cooler
 
 def changeGraphics(gameDisplay, component):
-
+    global degree
+    global degreeb
     if component[0] is True and component[1] is False:
         tLines = [1, 3, 4, 5, 6, 7, 8, 9]
 
@@ -83,7 +96,24 @@ def changeGraphics(gameDisplay, component):
     if component[9] is True:  # draw aroma hopper
         pygame.draw.rect(gameDisplay, blue, [608, 76, 25, 19])
 
-'''
+    if component[0] is True:
+        for i in range(5):
+            print(degree)
+            x = mashpumpctr[0] + math.cos(math.radians(degree + angles[i])) * impeller_len
+            y = mashpumpctr[1] + math.sin(math.radians(degree + angles[i])) * impeller_len
+            pygame.draw.line(gameDisplay, blue, mashpumpctr, [x, y], 1)
+        degree += 5
+
+    if component[2] is True:
+        for i in range(5):
+            print(degree)
+            xb = boilerpumpctr[0] + math.cos(math.radians(degreeb + angles[i])) * impeller_len
+            yb = boilerpumpctr[1] + math.sin(math.radians(degreeb + angles[i])) * impeller_len
+            pygame.draw.line(gameDisplay, blue, boilerpumpctr, [xb, yb], 1)
+
+        degreeb -= 5
+
+
 bg = pygame.image.load("barleyworksbackground2.jpg")
 pygame.init()
 pygame.display.set_caption('Barley Works')
@@ -101,8 +131,8 @@ while state:
     gameDisplay.blit(bg, (0, 0))
     changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
     pygame.display.update()
-    time.sleep(10)
+
     clock.tick(30)
-'''
+
 
 

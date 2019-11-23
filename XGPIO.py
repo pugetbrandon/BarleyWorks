@@ -36,13 +36,13 @@ def setGPIO(changeComp):
     for i in range(7):
         print(i)
         components.append(False)
-    for i in range(8, 10):
+    for i in range(7, 10):
         components.append(True)
 
     for i in changeComp:
         components[i] = True
 
-    for i in range(7):
+    for i in range(10):
         if components[i] is True:
             print(" high ", i)
             GPIO.output(pins[i], GPIO.HIGH)
