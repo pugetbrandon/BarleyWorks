@@ -26,31 +26,16 @@ def loadgametest():
 
 class Operation:
 
-    def __init__(self, func, equipMent, setpoint, initheatersignal):
-        #self.phase = phase
+    def __init__(self, func, equipMent, setpoint, initheatersignal, tempmode, phase):
+        self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
         self.components = XGPIO.setGPIO(self.equipMent)
         self.func = func
         self.initheatersignal = initheatersignal
+        self.tempmode = tempmode
         XPhidgets.setheatersignal(self.initheatersignal)
         self.gameLoop(self)
-
-    def endheat2strike(self, setpoint):
-        state = True
-        self.setpoint = setpoint
-        temperature = XPhidgets.whattemp()
-        if temperature >= self.setpoint:
-            state = False
-        return state
-
-
-    def endfillmashtun(self):
-        state = True
-        level = XGPIO.getlevel()
-        if level[0] is True or level[1] is False:
-            state = False
-        return state
 
     def gameLoop(self):
         gameExit = False
@@ -62,10 +47,13 @@ class Operation:
             #   state = check()   if event.type ==pygame.QUIT:
             #         gameExit = True
 
-            state = self.func(self.setpoint)
+            state = self.func()
             gameDisplay = pygame.display.set_mode((1002, 672))
             gameDisplay.fill(white)
             gameDisplay.blit(bg, (0, 0))
+            Graphics.displayphase(self.phase)
+            if self.tempmode is True:
+                Graphics.displaytemp(XPhidgets.temp9)
             Graphics.changeGraphics(gameDisplay, self.components)
             pygame.display.update()
             # time.sleep(10)
@@ -85,17 +73,19 @@ loadgametest()
 
 
 # HEAT TO STRIKE TEMPERATURE 1
-def endheat2strike(self, setpoint):
-        temperature = XPhidgets.gettemp()
-        if temperature >= self.setpoint:
-            state = False
-        return state
+def endheat2strike(self):
+    temperature = XPhidgets.gettemp()
+    self.temperature = temperature
+    if temperature >= self.setpoint:
+        state = False
+    return state
 
-#phase = "heat2strike"
+phase = "Heat to Strike"
 equipMent = [2, 6]  # BP and Heater
 stkTemp = Recipe[1]  # recipe is never called
 heaterSignal = 100
-heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal)
+tempmode = True
+heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
 
 heat2strike.endgameLoop()
 print("Success")

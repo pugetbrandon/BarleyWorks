@@ -113,6 +113,24 @@ def changeGraphics(gameDisplay, component):
 
         degreeb -= 5
 
+def displaytemp(temp):
+    DefaultFont = None
+    GameFont = pygame.font.Font(DefaultFont, 40)
+    GameText = str(temp) + "F"
+    GameTempGraphic = GameFont.render(GameText, True, black)
+    gameDisplay.blit(GameTempGraphic, (485, 250))
+
+
+def displayphase(phase):
+    DefaultFont = None
+    GameFont = pygame.font.Font(DefaultFont, 40)
+    PhaseTextGraphic = GameFont.render(phase, True, black)
+    gameDisplay.blit(PhaseTextGraphic, (710, 36))
+
+
+
+
+
 
 bg = pygame.image.load("barleyworksbackground2.jpg")
 pygame.init()
@@ -127,8 +145,13 @@ while state:
 
 
     gameDisplay = pygame.display.set_mode((1002, 672))
+    #tempdisplay = displaytemp(100)
+
     gameDisplay.fill(white)
     gameDisplay.blit(bg, (0, 0))
+    displaytemp(100)
+    displayphase("Heat to Strike")
+    #gameDisplay.blit(tempdisplay, (485, 250))
     changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
     pygame.display.update()
 
