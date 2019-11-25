@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import time
 
 # Component, list position, GPIO, pin
 # Mashpump, 0, 1, 28
@@ -12,12 +13,13 @@ import RPi.GPIO as GPIO
 
 
 
-pins = (28, 29, 37, 18, 24, 26, 5, 32, 15, 22)
+pins = (1, 5, 26, 24, 8, 7, 22, 12, 2, 25)   #Not actually Pins, GPIO
 levelpins = (3, 35)  # Mash level is position 0, boiler level is position 1
 #TODO put a comment with position number and components
 
 
 def setup():
+    #GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     global pins
     global levelpins
@@ -26,7 +28,7 @@ def setup():
     for i in range(1):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-GPIO.setmode(GPIO.BCM)
+
 
 
 
@@ -34,7 +36,6 @@ def setGPIO(changeComp):
     global pins
     components = []
     for i in range(7):
-        print(i)
         components.append(False)
     for i in range(7, 10):
         components.append(True)
@@ -44,10 +45,8 @@ def setGPIO(changeComp):
 
     for i in range(10):
         if components[i] is True:
-            print(" high ", i)
             GPIO.output(pins[i], GPIO.HIGH)
         else:
-            print("Low ", i)
             GPIO.output(pins[i], GPIO.LOW)
     return components
 
@@ -57,3 +56,20 @@ def getlevel():
     level[0] = GPIO.input(levelpins[0])
     level[1] = GPIO.input(levelpins[1])
     return level
+'''
+setup()
+changeComp = []
+for i in range(10):
+    changeComp.append(i)
+    print(changeComp)
+setGPIO(changeComp)
+print("High")
+time.sleep(10)
+
+changeComp2 = []
+setGPIO(changeComp2)
+print('Low')
+time.sleep(10)
+GPIO.cleanup()
+
+'''

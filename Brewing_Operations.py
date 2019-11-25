@@ -35,7 +35,7 @@ class Operation:
         self.initheatersignal = initheatersignal
         self.tempmode = tempmode
         XPhidgets.setheatersignal(self.initheatersignal)
-        self.gameLoop(self)
+        self.gameLoop()
 
     def gameLoop(self):
         gameExit = False
@@ -47,13 +47,13 @@ class Operation:
             #   state = check()   if event.type ==pygame.QUIT:
             #         gameExit = True
 
-            state = self.func()
+            state = self.func(self)
             gameDisplay = pygame.display.set_mode((1002, 672))
             gameDisplay.fill(white)
             gameDisplay.blit(bg, (0, 0))
-            Graphics.displayphase(self.phase)
+            Graphics.displayphase(gameDisplay, self.phase)
             if self.tempmode is True:
-                Graphics.displaytemp(XPhidgets.temp9)
+                Graphics.displaytemp(gameDisplay, XPhidgets.temp9)
             Graphics.changeGraphics(gameDisplay, self.components)
             pygame.display.update()
             # time.sleep(10)
@@ -74,6 +74,8 @@ loadgametest()
 
 # HEAT TO STRIKE TEMPERATURE 1
 def endheat2strike(self):
+
+    state = True
     temperature = XPhidgets.gettemp()
     self.temperature = temperature
     if temperature >= self.setpoint:

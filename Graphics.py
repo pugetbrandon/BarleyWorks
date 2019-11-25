@@ -98,7 +98,6 @@ def changeGraphics(gameDisplay, component):
 
     if component[0] is True:
         for i in range(5):
-            print(degree)
             x = mashpumpctr[0] + math.cos(math.radians(degree + angles[i])) * impeller_len
             y = mashpumpctr[1] + math.sin(math.radians(degree + angles[i])) * impeller_len
             pygame.draw.line(gameDisplay, blue, mashpumpctr, [x, y], 1)
@@ -106,22 +105,22 @@ def changeGraphics(gameDisplay, component):
 
     if component[2] is True:
         for i in range(5):
-            print(degree)
             xb = boilerpumpctr[0] + math.cos(math.radians(degreeb + angles[i])) * impeller_len
             yb = boilerpumpctr[1] + math.sin(math.radians(degreeb + angles[i])) * impeller_len
             pygame.draw.line(gameDisplay, blue, boilerpumpctr, [xb, yb], 1)
 
         degreeb -= 5
 
-def displaytemp(temp):
+def displaytemp(gameDisplay, temp):
     DefaultFont = None
     GameFont = pygame.font.Font(DefaultFont, 40)
-    GameText = str(temp) + "F"
+    temp1 = format(temp, '.1f')
+    GameText = str(temp1) + "F"
     GameTempGraphic = GameFont.render(GameText, True, black)
-    gameDisplay.blit(GameTempGraphic, (485, 250))
+    gameDisplay.blit(GameTempGraphic, (475, 250))
 
 
-def displayphase(phase):
+def displayphase(gameDisplay, phase):
     DefaultFont = None
     GameFont = pygame.font.Font(DefaultFont, 40)
     PhaseTextGraphic = GameFont.render(phase, True, black)
@@ -130,7 +129,7 @@ def displayphase(phase):
 
 
 
-
+'''
 
 bg = pygame.image.load("barleyworksbackground2.jpg")
 pygame.init()
@@ -159,3 +158,4 @@ while state:
 
 
 
+'''
