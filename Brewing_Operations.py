@@ -3,10 +3,10 @@ import XGPIO
 import Graphics
 import XPhidgets
 import Recipe
+import multitimer
 
 import time
 
-# new color
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
@@ -14,11 +14,6 @@ blue = (0, 0, 255)
 lineSize = 5
 
 bg = pygame.image.load("barleyworksbackground2.jpg")
-
-# Items needed for setup
-# need to energize hoppers and set initial valve position
-# XGPIO.setup()
-# loadgametest()
 
 def loadgametest():
     pygame.init()
@@ -46,7 +41,8 @@ class Operation:
             #   for event in pygame.event.get():
             #   state = check()   if event.type ==pygame.QUIT:
             #         gameExit = True
-
+            #multitimer.MultiTimer(1, self.func(self), self, -1, runonstart=True)
+            #state = self.state
             state = self.func(self)
             gameDisplay = pygame.display.set_mode((1002, 672))
             gameDisplay.fill(white)
@@ -74,13 +70,16 @@ loadgametest()
 
 # HEAT TO STRIKE TEMPERATURE 1
 def endheat2strike(self):
-
     state = True
-    temperature = XPhidgets.gettemp()
-    self.temperature = temperature
+    temptimer = multitimer.MultiTimer(1, XPhidgets.gettemp(), -1, runonstart=True)
+    temptimer.start()
+    temperature = XPhidgets.temp9
+    #temperature = XPhidgets.gettemp()
+    #self.temperature = temperature
     if temperature >= self.setpoint:
-        state = False
-    return state
+        temptimer.stop()
+        self.state = False
+
 
 phase = "Heat to Strike"
 equipMent = [2, 6]  # BP and Heater

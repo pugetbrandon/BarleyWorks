@@ -1,5 +1,6 @@
 import pygame
 import math
+import pygbutton
 import time
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -129,33 +130,32 @@ def displayphase(gameDisplay, phase):
 
 
 
-'''
 
-bg = pygame.image.load("barleyworksbackground2.jpg")
-pygame.init()
-pygame.display.set_caption('Barley Works')
-gameExit = False
-clock = pygame.time.Clock()
-state = True
-while state:
-            #   for event in pygame.event.get():
-            #   state = check()   if event.type ==pygame.QUIT:
-            #         gameExit = True
-
-
-    gameDisplay = pygame.display.set_mode((1002, 672))
-    #tempdisplay = displaytemp(100)
-
-    gameDisplay.fill(white)
-    gameDisplay.blit(bg, (0, 0))
-    displaytemp(100)
-    displayphase("Heat to Strike")
-    #gameDisplay.blit(tempdisplay, (485, 250))
-    changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
-    pygame.display.update()
-
-    clock.tick(30)
+if __name__ == "__main__":
+    bg = pygame.image.load("barleyworksbackground2.jpg")
+    pygame.init()
+    pygame.display.set_caption('Barley Works')
+    gameExit = False
+    clock = pygame.time.Clock()
+    state = True
+    while state:
+                #   for event in pygame.event.get():
+                #   state = check()   if event.type ==pygame.QUIT:
+                #         gameExit = True
 
 
+        gameDisplay = pygame.display.set_mode((1002, 672))
+        #tempdisplay = displaytemp(100)
 
-'''
+        gameDisplay.fill(white)
+        gameDisplay.blit(bg, (0, 0))
+        displaytemp(gameDisplay, 100)
+        displayphase(gameDisplay, "Heat to Strike")
+        #gameDisplay.blit(tempdisplay, (485, 250))
+        changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
+        pygame.display.update()
+
+        clock.tick(30)
+
+
+
