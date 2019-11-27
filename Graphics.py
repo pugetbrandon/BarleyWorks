@@ -16,6 +16,7 @@ mashpumpctr = (290, 346)
 boilerpumpctr = (708, 440)
 impeller_len = 13
 angles = (0, 72, 144, 216, 288)
+tlines = []
 
 FPSCLOCK = pygame.time.Clock()
 

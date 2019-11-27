@@ -1,5 +1,5 @@
 import pygame
-#import XGPIO
+import XGPIO
 import Graphics
 import XPhidgets
 import Recipe
@@ -57,7 +57,7 @@ def checkbuttons(buttons, gameDisplay):
                         components[i] = False
                     else:
                         components[i] = True
-                # XGPIO.setGPIO2(components)
+                XGPIO.setGPIO2(components)
 
 def gameLoop():
     gameExit = False
@@ -86,7 +86,7 @@ def gameLoop():
             pygame.quit()
             quit()
 
-#XGPIO.setup()
+XGPIO.setup()
 loadgametest()
 gameLoop()
 

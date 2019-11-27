@@ -71,8 +71,7 @@ loadgametest()
 # HEAT TO STRIKE TEMPERATURE 1
 def endheat2strike(self):
     state = True
-    temptimer = multitimer.MultiTimer(1, XPhidgets.gettemp(), -1, runonstart=True)
-    temptimer.start()
+    XPhidgets.gettimedtemp()
     temperature = XPhidgets.temp9
     #temperature = XPhidgets.gettemp()
     #self.temperature = temperature

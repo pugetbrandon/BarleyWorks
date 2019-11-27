@@ -5,6 +5,7 @@ from Phidget22.Devices.TemperatureSensor import *
 # from Phidget22.EnumerationType import *
 from Phidget22.ThermocoupleType import *
 from Phidget22.Devices.VoltageOutput import *
+import multitimer
 import time
 
 
@@ -39,12 +40,19 @@ def gettemp():
     temp9 = ch2.getTemperature() * 9 / 5 + 32
     temp8 = temp9
     #time.sleep(10)
-
+    print(temp9)
     ch2.close()
 
 
     return temp8
-voltageOutput0 = VoltageOutput()
+
+def gettimedtemp():
+
+    temptimer = multitimer.MultiTimer(1, gettemp, -1, runonstart=True)
+    temptimer.start()
+
+
+voltageOutput0 = VoltageOutput()  #keeps the voltage set after the function ends
 def setheatersignal(heatersignal):
     global voltageOutput0
     voltageOutput0.openWaitForAttachment(5000)
