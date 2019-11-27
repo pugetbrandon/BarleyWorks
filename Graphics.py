@@ -118,7 +118,7 @@ def displaytemp(gameDisplay, temp):
     temp1 = format(temp, '.1f')
     GameText = str(temp1) + "F"
     GameTempGraphic = GameFont.render(GameText, True, black)
-    gameDisplay.blit(GameTempGraphic, (475, 250))
+    gameDisplay.blit(GameTempGraphic, (465, 250))
 
 
 def displayphase(gameDisplay, phase):
@@ -127,6 +127,21 @@ def displayphase(gameDisplay, phase):
     PhaseTextGraphic = GameFont.render(phase, True, black)
     gameDisplay.blit(PhaseTextGraphic, (710, 36))
 
+def displayheatersignal(gameDisplay, heatersignal):
+    DefaultFont = None
+    GameFont = pygame.font.Font(DefaultFont, 40)
+    GameText = str(heatersignal) + "%"
+    GamehtrSignalGraphic = GameFont.render(GameText, True, black)
+    gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
+
+
+def buttoncontrol(gameDisplay, btntitle):
+    btncontrol = pygbutton.PygButton((375, 500, 40, 80), btntitle)
+    btncontrol.draw(gameDisplay)
+    for event in pygame.event.get():  # event handling loop
+        if 'click' in btncontrol.handleEvent(event):
+            state = False
+            return state
 
 
 
@@ -151,6 +166,7 @@ if __name__ == "__main__":
         gameDisplay.blit(bg, (0, 0))
         displaytemp(gameDisplay, 100)
         displayphase(gameDisplay, "Heat to Strike")
+        displayheatersignal(gameDisplay, 50)
         #gameDisplay.blit(tempdisplay, (485, 250))
         changeGraphics(gameDisplay, [True, True, True, True, True, True, True, True, True, True])
         pygame.display.update()

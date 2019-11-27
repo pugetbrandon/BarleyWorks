@@ -44,7 +44,7 @@ def makebuttons():
         xy = bxy[i]
         x = xy[0]
         y = xy[1]
-        buttons.append(pygbutton.PygButton((x, y, bwidth, bheight), btitles[i]))
+        buttons.append(pygbutton.PygButton((bxy[i][0], bxy[i][1], bwidth, bheight), btitles[i]))
     return buttons
 
 def checkbuttons(buttons, gameDisplay):
@@ -55,9 +55,9 @@ def checkbuttons(buttons, gameDisplay):
                 if 'click' in buttons[i].handleEvent(event):
                     if components[i] is True:
                         components[i] = False
-                    elif components[i] is False:
+                    else:
                         components[i] = True
-                # XGPIO.setGPIO(components)
+                # XGPIO.setGPIO2(components)
 
 def gameLoop():
     gameExit = False
@@ -73,8 +73,10 @@ def gameLoop():
         gameDisplay = pygame.display.set_mode((1002, 672))
         gameDisplay.fill(white)
         gameDisplay.blit(bg, (0, 0))
+        Graphics.displaytemp(gameDisplay, 100)  #need to create a multitimer to gettemp
+        Graphics.displayphase(gameDisplay, "Test Environment")
+        Graphics.displayheatersignal(gameDisplay, 50)
         checkbuttons(btns, gameDisplay)
-        #Graphics.displaytemp(gameDisplay, XPhidgets.temp9)
         Graphics.changeGraphics(gameDisplay, components)
         pygame.display.update()
         # time.sleep(10)

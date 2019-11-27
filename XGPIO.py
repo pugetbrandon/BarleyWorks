@@ -50,6 +50,14 @@ def setGPIO(changeComp):
             GPIO.output(pins[i], GPIO.LOW)
     return components
 
+def setGPIO2(components):
+    global pins
+    for i in range(10):
+        if components[i] is True:
+            GPIO.output(pins[i], GPIO.HIGH)
+        else:
+            GPIO.output(pins[i], GPIO.LOW)
+
 def getlevel():
     global levelpins
     level = []
