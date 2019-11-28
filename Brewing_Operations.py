@@ -1,5 +1,7 @@
+GPIOActive = False
 import pygame
-import XGPIO
+if GPIOActive == True:
+    import XGPIO
 import Graphics
 import XPhidgets
 import Recipe
@@ -25,7 +27,10 @@ class Operation:
         self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
-        self.components = XGPIO.setGPIO(self.equipMent)
+        if GPIOActive == True:
+            self.components = XGPIO.setGPIO(self.equipMent)
+        else:
+            self.components = [False, False, False, False, False, False, False, False, False, False]
         self.func = func
         self.initheatersignal = initheatersignal
         self.tempmode = tempmode
@@ -63,21 +68,26 @@ class Operation:
 #SETUP
 Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
-XGPIO.setup()
+if GPIOActive == True:
+    XGPIO.setup()
 loadgametest()
 
 
 
 # HEAT TO STRIKE TEMPERATURE 1
 def endheat2strike(self):
-    state = True
-    XPhidgets.gettimedtemp()
+    self.state = True
+    #XPhidgets.gettimedtemp()
+    #XPhidgets.gettemp3()
     temperature = XPhidgets.temp9
+
     #temperature = XPhidgets.gettemp()
     #self.temperature = temperature
     if temperature >= self.setpoint:
-        temptimer.stop()
+        #temptimer.stop()
         self.state = False
+    else:
+        return self.state
 
 
 phase = "Heat to Strike"
@@ -85,12 +95,12 @@ equipMent = [2, 6]  # BP and Heater
 stkTemp = Recipe[1]  # recipe is never called
 heaterSignal = 100
 tempmode = True
+channel = XPhidgets.gettemp3()
 heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
-
+XPhidgets.closetemp(channel)
 heat2strike.endgameLoop()
 print("Success")
-# TODO  need to creat a pause here to allow a button to be pushed to start transfer.
-# TODO learn how to create a button
+
 
 '''
 # Transfer to Mash Tun

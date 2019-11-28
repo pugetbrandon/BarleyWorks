@@ -40,10 +40,6 @@ bheight = 30
 
 def makebuttons():
     for i in range(10):
-        xy = []
-        xy = bxy[i]
-        x = xy[0]
-        y = xy[1]
         buttons.append(pygbutton.PygButton((bxy[i][0], bxy[i][1], bwidth, bheight), btitles[i]))
     return buttons
 
@@ -73,7 +69,7 @@ def gameLoop():
         gameDisplay = pygame.display.set_mode((1002, 672))
         gameDisplay.fill(white)
         gameDisplay.blit(bg, (0, 0))
-        Graphics.displaytemp(gameDisplay, 100)  #need to create a multitimer to gettemp
+        Graphics.displaytemp(gameDisplay, XPhidgets.temp9)  #need to create a multitimer to gettemp
         Graphics.displayphase(gameDisplay, "Test Environment")
         Graphics.displayheatersignal(gameDisplay, 50)
         checkbuttons(btns, gameDisplay)
@@ -88,7 +84,9 @@ def gameLoop():
 
 XGPIO.setup()
 loadgametest()
+channel = XPhidgets.gettemp3()
 gameLoop()
+XPhidgets.closetemp(channel)
 
 
 

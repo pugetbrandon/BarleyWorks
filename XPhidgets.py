@@ -14,20 +14,24 @@ temp9 = 0
 
 def onAttachHandler(self):
 
-    ch = self
-    ch.setTemperatureChangeTrigger(0.01)
-    ch.setThermocoupleType(ThermocoupleType.THERMOCOUPLE_TYPE_K)
-    ch.setDataInterval(1000)
+    ch2 = self
+    ch2.setTemperatureChangeTrigger(1.0)
+    ch2 .setThermocoupleType(ThermocoupleType.THERMOCOUPLE_TYPE_K)
+    ch2.setDataInterval(4000)
+    print("setTrigger")
+
+
 
 def onTemperatureChangeHandler(self, temperature):
 
+    print(temperature)
     self.val = temperature * 9 / 5 + 32
     self.val = float(self.val)
 
     global temp9
     temp9 = self.val
 
-    return temperature
+
 
 def gettemp():
     global temp9
@@ -35,6 +39,7 @@ def gettemp():
     ch2.setDeviceSerialNumber(118651)
     ch2.setChannel(0)
     ch2.setOnAttachHandler(onAttachHandler)
+
     #ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
     ch2.openWaitForAttachment(5000)
     temp9 = ch2.getTemperature() * 9 / 5 + 32
@@ -45,6 +50,24 @@ def gettemp():
 
 
     return temp8
+
+def gettemp3():
+    global temp9
+    ch2 = TemperatureSensor()
+    ch2.setDeviceSerialNumber(118651)
+    ch2.setChannel(0)
+    ch2.setOnAttachHandler(onAttachHandler)
+    ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
+    ch2.openWaitForAttachment(5000)
+    return ch2
+    #ch2.close()
+
+def closetemp(self):
+    ch2 = self
+    ch2.close()
+    print("closed")
+
+
 
 def gettimedtemp():
 
