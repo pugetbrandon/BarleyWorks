@@ -24,7 +24,7 @@ def onAttachHandler(self):
 
 def onTemperatureChangeHandler(self, temperature):
 
-    print(temperature)
+    print(temperature + 300)
     self.val = temperature * 9 / 5 + 32
     self.val = float(self.val)
 

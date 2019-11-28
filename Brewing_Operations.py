@@ -1,4 +1,4 @@
-GPIOActive = False
+GPIOActive = True
 import pygame
 if GPIOActive == True:
     import XGPIO

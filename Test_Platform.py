@@ -69,7 +69,9 @@ def gameLoop():
         gameDisplay = pygame.display.set_mode((1002, 672))
         gameDisplay.fill(white)
         gameDisplay.blit(bg, (0, 0))
-        Graphics.displaytemp(gameDisplay, XPhidgets.temp9)  #need to create a multitimer to gettemp
+        Graphics.displaytemp(gameDisplay, XPhidgets.temp9)
+        print(XPhidgets.temp9)
+        #need to create a multitimer to gettemp
         Graphics.displayphase(gameDisplay, "Test Environment")
         Graphics.displayheatersignal(gameDisplay, 50)
         checkbuttons(btns, gameDisplay)
