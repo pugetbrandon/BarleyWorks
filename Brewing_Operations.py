@@ -86,6 +86,7 @@ def endheat2strike(self):
     if temperature >= self.setpoint:
         #temptimer.stop()
         self.state = False
+        return self.state
     else:
         return self.state
 
@@ -95,27 +96,85 @@ equipMent = [2, 6]  # BP and Heater
 stkTemp = Recipe[1]  # recipe is never called
 heaterSignal = 100
 tempmode = True
-channel = XPhidgets.gettemp3()
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
-heat2strike.endgameLoop()
-print("Success")
+tempmode = False
+#heat2strike.endgameLoop()
 
-
-'''
 # Transfer to Mash Tun
-phase = "fillmashtun"
+def endfillmash(self):
+    self.state = True
+    if GPIO.event_detected(XGPIO.levelpins[0]) or GPIO.event_detected(XGPIO.levelpins[1]):
+        self.state = False
+        return self.state
+    else:
+        return self.state
+
+phase = "Fill Mashtun"
 equipMent = [3, 4]
-components = setState(equipMent)
-XGPIO.setGPIOhi(components)
-gameLoop(phase, components, 0)
+XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], RISING)
+XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], FALLING)
+heaterSignal = 0
+tempmode = False
+fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
+
+#Mix
+
+def endmashmix(self):
+    self.state = Graphics.buttoncontrol(self.gameDisplay, "Complete Mixing")
+    return self.state
+
+phase = "Mix Mashtun"
+equipMent = []
+heaterSignal = 0
+tempmode = False
+mixmash = Operation(endmashmix, equipMent, 0, heaterSignal, tempmode, phase)
+
 
 # Filter
-phase = "filter"
+
+def endfiltermash(self):
+    self.state = True
+    if time.time() >= (self.setpoint[0] + self.setpoint[1]):
+        self.state = False
+        return self.state
+    return self.state
+
+phase = "Filter Mashtun"
 equipMent = [0]
-components = setState(equipMent)
-XGPIO.setGPIOhi(components)
-gameLoop(phase, components, 0)
-# TODO create
-'''
+filterTime = Recipe[9]
+heaterSignal = 0
+tempmode = False
+starttime = time.time()
+timerinfo = [filterTime, starttime]
+filtermash = Operation(endfiltermash, equipMent, timerinfo, heaterSignal, tempmode, phase)
+
+# Mash
+def endmash(self):
+    mashtime = self.setpoint[0]
+    starttime = self.setpoint[1]
+    mashtemp = self.setpoint[2]
+    self.heaterSignal = Graphics.heaterctrlbuttons(self.heaterSignal)
+    
+    if time.time() >= (mashtime + starttime):
+        self.state = False
+        return self.state
+    else:
+        self.state = True
+        return self.state
+
+
+
+mashtemp = Recipe[2]
+phase = "Mash at", str(mashtemp), "F"
+equipMent = [0, 1, 2, 3, 6]
+heaterSignal = 30
+tempmode = True
+starttime = time.time()
+mashtime = Recipe[3]
+mashinfo = [mashtime, starttime, mashtemp]
+mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
+
+
 
