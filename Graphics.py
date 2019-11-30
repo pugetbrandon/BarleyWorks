@@ -1,6 +1,7 @@
 import pygame
 import math
 import pygbutton
+import XPhidgets
 import time
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -143,7 +144,26 @@ def buttoncontrol(gameDisplay, btntitle):
         if 'click' in btncontrol.handleEvent(event):
             state = False
             return state
+        else:
+            state = True
+            return
 
+def heaterctrlbuttons(gameDisplay, heaterSignal):
+    upheater = pygbutton.PygButton((875, 215, 40, 80), "Heater Up")
+    upheater.draw(gameDisplay)
+    for event in pygame.event.get():  # event handling loop
+        if 'click' in upheater.handleEvent(event):
+            heaterSignal += 1
+            XPhidgets.setheatersignal(heaterSignal)
+            return heaterSignal
+    downheater = pygbutton.PygButton((875, 255, 40, 80), "Heater Up")
+    downheater.draw(gameDisplay)
+    for event in pygame.event.get():  # event handling loop
+        if 'click' in downheater.handleEvent(event):
+            heaterSignal -= 1
+            XPhidgets.setheatersignal(heaterSignal)
+            return heaterSignal
+    return heaterSignal
 
 
 

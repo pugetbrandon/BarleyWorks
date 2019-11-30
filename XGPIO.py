@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-import time
+
 
 # Component, list position, GPIO, pin
 # Mashpump, 0, 1, 28
@@ -64,6 +64,15 @@ def getlevel():
     level[0] = GPIO.input(levelpins[0])
     level[1] = GPIO.input(levelpins[1])
     return level
+
+def levelmonitor():
+    for i in range(1):
+        GPIO.add_event_detect(levelpins[i], GPIO.RISING)
+
+
+
+
+
 '''
 setup()
 changeComp = []
