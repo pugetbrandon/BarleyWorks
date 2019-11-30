@@ -105,7 +105,7 @@ tempmode = False
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if GPIO.event_detected(XGPIO.levelpins[0]) or GPIO.event_detected(XGPIO.levelpins[1]):
+    if XGPIO.GPIO.event_detected(XGPIO.levelpins[0]) or XGPIO.GPIO.event_detected(XGPIO.levelpins[1]):
         self.state = False
         return self.state
     else:
@@ -113,8 +113,9 @@ def endfillmash(self):
 
 phase = "Fill Mashtun"
 equipMent = [3, 4]
-XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], RISING)
-XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], FALLING)
+#XGPIO.setuplevel()
+XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], XGPIO.GPIO.RISING)
+XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], XGPIO.GPIO.FALLING)
 heaterSignal = 0
 tempmode = False
 fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)

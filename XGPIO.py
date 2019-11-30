@@ -28,7 +28,9 @@ def setup():
     for i in range(1):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-
+def setuplevel():
+    for i in range(1):
+        GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
