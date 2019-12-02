@@ -163,6 +163,8 @@ def heaterctrlbuttons(gameDisplay, heaterSignal):
             heaterSignal -= 1
             XPhidgets.setheatersignal(heaterSignal)
             return heaterSignal
+    for event in pygame.event.get():
+        if ''
     return heaterSignal
 
 

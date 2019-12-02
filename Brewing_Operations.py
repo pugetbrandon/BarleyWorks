@@ -2,6 +2,7 @@ GPIOActive = True
 import pygame
 if GPIOActive == True:
     import XGPIO
+    import RPi.GPIO as GPIO
 import Graphics
 import XPhidgets
 import Recipe
@@ -27,7 +28,7 @@ class Operation:
         self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
-        if GPIOActive == True:
+        if GPIOActive:
             self.components = XGPIO.setGPIO(self.equipMent)
         else:
             self.components = [False, False, False, False, False, False, False, False, False, False]
@@ -68,7 +69,7 @@ class Operation:
 #SETUP
 Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
-if GPIOActive == True:
+if GPIOActive:
     XGPIO.setup()
 loadgametest()
 
@@ -114,8 +115,9 @@ def endfillmash(self):
 phase = "Fill Mashtun"
 equipMent = [3, 4]
 #XGPIO.setuplevel()
-XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], XGPIO.GPIO.RISING)
-XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], XGPIO.GPIO.FALLING)
+XGPIO.leveldetector()
+#XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], XGPIO.GPIO.RISING)
+#XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], XGPIO.GPIO.FALLING)
 heaterSignal = 0
 tempmode = False
 fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)

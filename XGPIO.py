@@ -71,7 +71,10 @@ def levelmonitor():
     for i in range(1):
         GPIO.add_event_detect(levelpins[i], GPIO.RISING)
 
-
+def leveldetector():
+    global levelpins
+    GPIO.add_event_detect(levelpins[0], GPIO.RISING)
+    GPIO.add_event_detect(levelpins[1], GPIO.FALLING)
 
 
 
