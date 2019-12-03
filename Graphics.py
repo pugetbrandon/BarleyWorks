@@ -132,39 +132,60 @@ def displayphase(gameDisplay, phase):
 def displayheatersignal(gameDisplay, heatersignal):
     DefaultFont = None
     GameFont = pygame.font.Font(DefaultFont, 40)
+    print(heatersignal)
     GameText = str(heatersignal) + "%"
+    print("gametext", GameText)
     GamehtrSignalGraphic = GameFont.render(GameText, True, black)
     gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
 
+def makecontrolbutton(btitle):
+    btncontrol = pygbutton.PygButton((60, 180, 110, 40), btitle)
+    return btncontrol
 
-def buttoncontrol(gameDisplay, btntitle):
-    btncontrol = pygbutton.PygButton((375, 500, 40, 80), btntitle)
+def buttoncontrol(btncontrol, gameDisplay):
+
     btncontrol.draw(gameDisplay)
     for event in pygame.event.get():  # event handling loop
         if 'click' in btncontrol.handleEvent(event):
             state = False
             return state
-        else:
-            state = True
-            return
+    state = True
+    return state
 
-def heaterctrlbuttons(gameDisplay, heaterSignal):
-    upheater = pygbutton.PygButton((875, 215, 40, 80), "Heater Up")
+def makehtrctrlbtns():
+    upheater = pygbutton.PygButton((825, 255, 80, 40), "Heater UP")
+    downheater = pygbutton.PygButton((825, 300, 80, 40), "Heater Down")
+    ctrlbtns = [upheater, downheater]
+    return ctrlbtns
+
+def heaterctrlbuttons(heatctrlbtns, gameDisplay, heaterSignal):
+    upheater = heatctrlbtns[0]
+    downheater = heatctrlbtns[1]
+
     upheater.draw(gameDisplay)
+    downheater.draw(gameDisplay)
     for event in pygame.event.get():  # event handling loop
         if 'click' in upheater.handleEvent(event):
             heaterSignal += 1
             XPhidgets.setheatersignal(heaterSignal)
             return heaterSignal
-    downheater = pygbutton.PygButton((875, 255, 40, 80), "Heater Up")
-    downheater.draw(gameDisplay)
-    for event in pygame.event.get():  # event handling loop
+
         if 'click' in downheater.handleEvent(event):
             heaterSignal -= 1
             XPhidgets.setheatersignal(heaterSignal)
             return heaterSignal
-    for event in pygame.event.get():
-        if ''
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                heaterSignal += 1
+                XPhidgets.setheatersignal(heaterSignal)
+                return heaterSignal
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DOWN:
+                heaterSignal -= 1
+                XPhidgets.setheatersignal(heaterSignal)
+                return heaterSignal
     return heaterSignal
 
 

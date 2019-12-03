@@ -15,9 +15,9 @@ temp9 = 0
 def onAttachHandler(self):
 
     ch2 = self
-    ch2.setTemperatureChangeTrigger(1.0)
+    ch2.setTemperatureChangeTrigger(0.5)
     ch2 .setThermocoupleType(ThermocoupleType.THERMOCOUPLE_TYPE_K)
-    ch2.setDataInterval(4000)
+    ch2.setDataInterval(1000)
     print("setTrigger")
 
 

@@ -14,7 +14,7 @@ import RPi.GPIO as GPIO
 
 
 pins = (1, 5, 26, 24, 8, 7, 22, 12, 2, 25)   #Not actually Pins, GPIO
-levelpins = (3, 35)  # Mash level is position 0, boiler level is position 1
+levelpins = (19, 16)  # Mash level is position 0, boiler level is position 1
 #TODO put a comment with position number and components
 
 
@@ -25,11 +25,11 @@ def setup():
     global levelpins
     for i in range(10):
         GPIO.setup(pins[i], GPIO.OUT)
-    for i in range(1):
+    for i in range(2):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def setuplevel():
-    for i in range(1):
+    for i in range(2):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
@@ -63,8 +63,8 @@ def setGPIO2(components):
 def getlevel():
     global levelpins
     level = []
-    level[0] = GPIO.input(levelpins[0])
-    level[1] = GPIO.input(levelpins[1])
+    level.append(GPIO.input(levelpins[0]))
+    level.append(GPIO.input(levelpins[1]))
     return level
 
 def levelmonitor():
@@ -77,6 +77,10 @@ def leveldetector():
     GPIO.add_event_detect(levelpins[1], GPIO.FALLING)
 
 
+if __name__ == "__main__":
+    setup()
+    level2 = getlevel()
+    print(level2)
 
 '''
 setup()

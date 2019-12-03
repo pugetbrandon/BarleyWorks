@@ -24,18 +24,19 @@ def loadgametest():
 
 class Operation:
 
-    def __init__(self, func, equipMent, setpoint, initheatersignal, tempmode, phase):
+    def __init__(self, func, equipMent, setpoint, heaterSignal, tempmode, phase):
         self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
+        #self.gameDisplay = gameDisplay
         if GPIOActive:
             self.components = XGPIO.setGPIO(self.equipMent)
         else:
             self.components = [False, False, False, False, False, False, False, False, False, False]
         self.func = func
-        self.initheatersignal = initheatersignal
+        self.heaterSignal = heaterSignal
         self.tempmode = tempmode
-        XPhidgets.setheatersignal(self.initheatersignal)
+        XPhidgets.setheatersignal(self.heaterSignal)
         self.gameLoop()
 
     def gameLoop(self):
@@ -47,16 +48,16 @@ class Operation:
             #   for event in pygame.event.get():
             #   state = check()   if event.type ==pygame.QUIT:
             #         gameExit = True
-            #multitimer.MultiTimer(1, self.func(self), self, -1, runonstart=True)
-            #state = self.state
+
+            self.gameDisplay = pygame.display.set_mode((1002, 672))
+            self.gameDisplay.fill(white)
+            self.gameDisplay.blit(bg, (0, 0))
             state = self.func(self)
-            gameDisplay = pygame.display.set_mode((1002, 672))
-            gameDisplay.fill(white)
-            gameDisplay.blit(bg, (0, 0))
-            Graphics.displayphase(gameDisplay, self.phase)
+            Graphics.displayphase(self.gameDisplay, self.phase)
             if self.tempmode is True:
-                Graphics.displaytemp(gameDisplay, XPhidgets.temp9)
-            Graphics.changeGraphics(gameDisplay, self.components)
+                Graphics.displaytemp(self.gameDisplay, XPhidgets.temp9)
+                Graphics.displayheatersignal(self.gameDisplay, self.heaterSignal)
+            Graphics.changeGraphics(self.gameDisplay, self.components)
             pygame.display.update()
             # time.sleep(10)
             clock.tick(30)
@@ -113,9 +114,9 @@ def endfillmash(self):
         return self.state
 
 phase = "Fill Mashtun"
-equipMent = [3, 4]
+equipMent = [2, 3]
 #XGPIO.setuplevel()
-XGPIO.leveldetector()
+XGPIO.leveldetector()  #todo figure out by this ends for rising and falling
 #XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], XGPIO.GPIO.RISING)
 #XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], XGPIO.GPIO.FALLING)
 heaterSignal = 0
@@ -125,14 +126,19 @@ fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
 #Mix
 
 def endmashmix(self):
-    self.state = Graphics.buttoncontrol(self.gameDisplay, "Complete Mixing")
+    #global gameLoop.gameDisplay
+    self.state = True
+    self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
     return self.state
+
+
 
 phase = "Mix Mashtun"
 equipMent = []
 heaterSignal = 0
 tempmode = False
-mixmash = Operation(endmashmix, equipMent, 0, heaterSignal, tempmode, phase)
+ctrbtns = Graphics.makecontrolbutton("Mix Complete")
+mixmash = Operation(endmashmix, equipMent, ctrbtns, heaterSignal, tempmode, phase)
 
 
 # Filter
@@ -158,7 +164,8 @@ def endmash(self):
     mashtime = self.setpoint[0]
     starttime = self.setpoint[1]
     mashtemp = self.setpoint[2]
-    self.heaterSignal = Graphics.heaterctrlbuttons(self.heaterSignal)
+    heatctrlbtns = self.setpoint[3]
+    self.heaterSignal = Graphics.heaterctrlbuttons(heatctrlbtns, self.gameDisplay, self.heaterSignal)
     
     if time.time() >= (mashtime + starttime):
         self.state = False
@@ -170,13 +177,14 @@ def endmash(self):
 
 
 mashtemp = Recipe[2]
-phase = "Mash at", str(mashtemp), "F"
+phase = "Mash"
 equipMent = [0, 1, 2, 3, 6]
 heaterSignal = 30
 tempmode = True
 starttime = time.time()
 mashtime = Recipe[3]
-mashinfo = [mashtime, starttime, mashtemp]
+heatctrlbtns = Graphics.makehtrctrlbtns()
+mashinfo = [mashtime, starttime, mashtemp, heatctrlbtns]
 mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
 
 
