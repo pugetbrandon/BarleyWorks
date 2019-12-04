@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import XPhidgets
 
 
 # Component, list position, GPIO, pin
@@ -18,6 +19,13 @@ levelpins = (19, 16)  # Mash level is position 0, boiler level is position 1
 #TODO put a comment with position number and components
 
 
+def interlock_callback():
+    level = getlevel()
+    if level[1] is False:
+        XPhidgets.setheatersignal(0)
+        GPIO.output(pins[6], GPIO.LOW)
+
+
 def setup():
     #GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
@@ -27,10 +35,9 @@ def setup():
         GPIO.setup(pins[i], GPIO.OUT)
     for i in range(2):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    #GPIO.add_event_detect(levelpins[1], GPIO.FALLING, interlock_callback, bouncetime=200)
 
-def setuplevel():
-    for i in range(2):
-        GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 
 
@@ -46,8 +53,16 @@ def setGPIO(changeComp):
         components[i] = True
 
     for i in range(10):
-        if components[i] is True:
+        if components[i] is True and i != 6:   # implements heater interlock with the boiler level
             GPIO.output(pins[i], GPIO.HIGH)
+        elif components[i] is True and i == 6:
+            level = getlevel()
+            if level[1]:
+                GPIO.output(pins[i], GPIO.HIGH)
+            else:
+                components[i] = False
+                XPhidgets.setheatersignal(0)
+                GPIO.output(pins[i], GPIO.LOW)
         else:
             GPIO.output(pins[i], GPIO.LOW)
     return components
@@ -67,14 +82,12 @@ def getlevel():
     level.append(GPIO.input(levelpins[1]))
     return level
 
-def levelmonitor():
-    for i in range(1):
-        GPIO.add_event_detect(levelpins[i], GPIO.RISING)
 
 def leveldetector():
     global levelpins
-    GPIO.add_event_detect(levelpins[0], GPIO.RISING)
-    GPIO.add_event_detect(levelpins[1], GPIO.FALLING)
+    print(levelpins)
+    GPIO.add_event_detect(levelpins[0], GPIO.FALLING, bouncetime=200)
+    GPIO.add_event_detect(levelpins[1], GPIO.FALLING, bouncetime=200)
 
 
 if __name__ == "__main__":

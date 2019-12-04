@@ -142,7 +142,7 @@ def makecontrolbutton(btitle):
     btncontrol = pygbutton.PygButton((60, 180, 110, 40), btitle)
     return btncontrol
 
-def buttoncontrol(btncontrol, gameDisplay):
+def buttoncontrol(btncontrol, gameDisplay):  #single button controller
 
     btncontrol.draw(gameDisplay)
     for event in pygame.event.get():  # event handling loop
@@ -153,17 +153,27 @@ def buttoncontrol(btncontrol, gameDisplay):
     return state
 
 def makehtrctrlbtns():
-    upheater = pygbutton.PygButton((825, 255, 80, 40), "Heater UP")
-    downheater = pygbutton.PygButton((825, 300, 80, 40), "Heater Down")
-    ctrlbtns = [upheater, downheater]
+    upheater = pygbutton.PygButton((825, 255, 100, 40), "Heater UP")
+    downheater = pygbutton.PygButton((825, 300, 100, 40), "Heater Down")
+    boilpwr = pygbutton.PygButton((825, 210, 100, 40), "66%")
+    fullpwr = pygbutton.PygButton((825, 165, 100, 40), "100%")
+    nopwr = pygbutton.PygButton((825, 345, 100, 40), "Zero")
+    ctrlbtns = [upheater, downheater, boilpwr, fullpwr, nopwr]
     return ctrlbtns
 
 def heaterctrlbuttons(heatctrlbtns, gameDisplay, heaterSignal):
     upheater = heatctrlbtns[0]
     downheater = heatctrlbtns[1]
-
+    boilpwr = heatctrlbtns[2]
+    fullpwr = heatctrlbtns[3]
+    nopwr = heatctrlbtns[4]
+    #
     upheater.draw(gameDisplay)
     downheater.draw(gameDisplay)
+    boilpwr.draw(gameDisplay)
+    fullpwr.draw(gameDisplay)
+    nopwr.draw(gameDisplay)
+    #
     for event in pygame.event.get():  # event handling loop
         if 'click' in upheater.handleEvent(event):
             heaterSignal += 1
@@ -172,6 +182,21 @@ def heaterctrlbuttons(heatctrlbtns, gameDisplay, heaterSignal):
 
         if 'click' in downheater.handleEvent(event):
             heaterSignal -= 1
+            XPhidgets.setheatersignal(heaterSignal)
+            return heaterSignal
+
+        if 'click' in boilpwr.handleEvent(event):
+            heaterSignal = 66
+            XPhidgets.setheatersignal(heaterSignal)
+            return heaterSignal
+
+        if 'click' in fullpwr.handleEvent(event):
+            heaterSignal = 100
+            XPhidgets.setheatersignal(heaterSignal)
+            return heaterSignal
+
+        if 'click' in nopwr.handleEvent(event):
+            heaterSignal = 0
             XPhidgets.setheatersignal(heaterSignal)
             return heaterSignal
 

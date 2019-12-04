@@ -115,10 +115,9 @@ def endfillmash(self):
 
 phase = "Fill Mashtun"
 equipMent = [2, 3]
-#XGPIO.setuplevel()
+
 XGPIO.leveldetector()  #todo figure out by this ends for rising and falling
-#XGPIO.GPIO.add_event_detect(XGPIO.levelpins[0], XGPIO.GPIO.RISING)
-#XGPIO.GPIO.add_event_detect(XGPIO.levelpins[1], XGPIO.GPIO.FALLING)
+
 heaterSignal = 0
 tempmode = False
 fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
