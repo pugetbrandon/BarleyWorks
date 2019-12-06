@@ -7,18 +7,27 @@ levelpins = (19, 16)  # Mash level is position 0, boiler level is position 1
 boilerlevel = True
 #TODO put a comment with position number and components
 
+Glevel = []
+interlock = False
+def levelupdater_callback(channel):
+    global Glevel
+    Clevel = getlevel()
+    Glevel = [bool(Clevel[0]), bool(Clevel[1])]   #Glevel[0] is mash level   Glevel[1] is boiler level
+    print(Glevel, "levelupdatercallback")
 
 def interlock_callback(channel):
     global pins
+    global interlock
     level = getlevel()
     print("interlock")
     print(level[1])
-    if level[1] == 0:
-        print("false")
+    if level[1] is False:
         XPhidgets.setheatersignal(0)
         GPIO.output(pins[6], GPIO.LOW)
-        print("low")
-        print(pins[6])
+        interlock = True
+    if level[1] is True:
+        interlock = False
+
 
 
 def setup():
@@ -30,8 +39,12 @@ def setup():
         GPIO.setup(pins[i], GPIO.OUT)
     for i in range(2):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(levelpins[1], GPIO.FALLING, interlock_callback, bouncetime=200)
+    GPIO.add_event_detect(levelpins[1], GPIO.BOTH, interlock_callback, bouncetime=200)
     GPIO.add_event_callback(levelpins[1], interlock_callback)
+    GPIO.add_event_callback(levelpins[1], levelupdater_callback)
+    GPIO.add_event_detect(levelpins[0], GPIO.BOTH, interlock_callback, bouncetime=200)
+    GPIO.add_event_callback(levelpins[0], levelupdater_callback)
+
 
 
 
@@ -56,7 +69,7 @@ def setGPIO(changeComp):
             if level[1]:
                 GPIO.output(pins[i], GPIO.HIGH)
             else:
-                components[i] = False
+                #components[i] = False
                 XPhidgets.setheatersignal(0)
                 GPIO.output(pins[i], GPIO.LOW)
         else:
@@ -73,9 +86,12 @@ def setGPIO2(components):
 
 def getlevel():
     global levelpins
+    global Glevel
     level = []
     level.append(GPIO.input(levelpins[0]))
     level.append(GPIO.input(levelpins[1]))
+    level = [bool(level[0]), bool(level[1])]
+    Glevel = level
     return level
 
 
@@ -83,11 +99,11 @@ def boilerlevel_callback():
     global boilerlevel
     boilerlevel = False
 
-
-def leveldetector():
-    global levelpins
-    GPIO.add_event_detect(levelpins[0], GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_callback(levelpins[1], boilerlevel_callback)
+#
+# def leveldetector():
+#     global levelpins
+#     GPIO.add_event_detect(levelpins[0], GPIO.FALLING, bouncetime=200)
+#     GPIO.add_event_callback(levelpins[1], boilerlevel_callback)
 
 
 if __name__ == "__main__":

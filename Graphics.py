@@ -2,6 +2,7 @@ import pygame
 import math
 import pygbutton
 import XPhidgets
+import XGPIO
 import time
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -87,8 +88,8 @@ def changeGraphics(gameDisplay, component):
 
     if component[5] is True:  # draw boiler valve
         pygame.draw.circle(gameDisplay, blue, [632, 423], 8)
-
-    if component[6] is True:  # draw boiler valve
+    print(component[6], XGPIO.interlock)
+    if component[6] is True and XGPIO.interlock is False:  # draw boiler valve
         pygame.draw.circle(gameDisplay, blue, [642, 252], 8)
 
     if component[7] is True:  # draw bitter hopper
@@ -115,6 +116,13 @@ def changeGraphics(gameDisplay, component):
 
         degreeb -= 5
 
+    if XGPIO.Glevel[0] is True:  # draw mash level
+        pygame.draw.circle(gameDisplay, blue, [287, 86], 8)
+
+
+    if XGPIO.Glevel[1] is True:  # draw boiler level
+        pygame.draw.circle(gameDisplay, blue, [731, 237], 8)
+
 def displaytemp(gameDisplay, temp):
     DefaultFont = None
     GameFont = pygame.font.Font(DefaultFont, 40)
@@ -131,11 +139,12 @@ def displayphase(gameDisplay, phase):
     gameDisplay.blit(PhaseTextGraphic, (710, 36))
 
 def displayheatersignal(gameDisplay, heatersignal):
-    DefaultFont = None
-    GameFont = pygame.font.Font(DefaultFont, 40)
-    GameText = str(heatersignal) + "%"
-    GamehtrSignalGraphic = GameFont.render(GameText, True, black)
-    gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
+    if XGPIO.interlock is False:
+        DefaultFont = None
+        GameFont = pygame.font.Font(DefaultFont, 40)
+        GameText = str(heatersignal) + "%"
+        GamehtrSignalGraphic = GameFont.render(GameText, True, black)
+        gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
 
 def makecontrolbutton(btitle):
     btncontrol = pygbutton.PygButton((60, 180, 110, 40), btitle)

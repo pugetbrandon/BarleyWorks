@@ -67,11 +67,14 @@ class Operation:
             quit()
 
 
+
+
 #SETUP
 Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
 if GPIOActive:
     XGPIO.setup()
+    XGPIO.getlevel()
 loadgametest()
 
 
@@ -103,7 +106,7 @@ tempmode = False
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if XGPIO.GPIO.event_detected(XGPIO.levelpins[0]) or XGPIO.boilerlevel is False:
+    if XGPIO.Glevel[0] is True or XGPIO.Glevel[1] is False:
         self.state = False
         return self.state
     else:
@@ -111,8 +114,6 @@ def endfillmash(self):
 
 phase = "Fill Mashtun"
 equipMent = [2, 3]
-
-XGPIO.leveldetector()  #todo figure out by this ends for rising and falling
 
 heaterSignal = 0
 tempmode = False
