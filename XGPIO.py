@@ -2,28 +2,23 @@ import RPi.GPIO as GPIO
 import XPhidgets
 
 
-# Component, list position, GPIO, pin
-# Mashpump, 0, 1, 28
-# Mashvalve, 1, 5, 29
-# Boiler Pump, 2, 26, 37
-# Boiler Valve, 3, 24, 18
-# Ferm Valve, 4, 8, 24,
-# Cooler Valve, 5, 7, 26
-# Heater, 6, 3, 5
-
-
-
-
 pins = (1, 5, 26, 24, 8, 7, 22, 12, 2, 25)   #Not actually Pins, GPIO
 levelpins = (19, 16)  # Mash level is position 0, boiler level is position 1
+boilerlevel = True
 #TODO put a comment with position number and components
 
 
-def interlock_callback():
+def interlock_callback(channel):
+    global pins
     level = getlevel()
-    if level[1] is False:
+    print("interlock")
+    print(level[1])
+    if level[1] == 0:
+        print("false")
         XPhidgets.setheatersignal(0)
         GPIO.output(pins[6], GPIO.LOW)
+        print("low")
+        print(pins[6])
 
 
 def setup():
@@ -35,7 +30,8 @@ def setup():
         GPIO.setup(pins[i], GPIO.OUT)
     for i in range(2):
         GPIO.setup(levelpins[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    #GPIO.add_event_detect(levelpins[1], GPIO.FALLING, interlock_callback, bouncetime=200)
+    GPIO.add_event_detect(levelpins[1], GPIO.FALLING, interlock_callback, bouncetime=200)
+    GPIO.add_event_callback(levelpins[1], interlock_callback)
 
 
 
@@ -83,11 +79,15 @@ def getlevel():
     return level
 
 
+def boilerlevel_callback():
+    global boilerlevel
+    boilerlevel = False
+
+
 def leveldetector():
     global levelpins
-    print(levelpins)
     GPIO.add_event_detect(levelpins[0], GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_detect(levelpins[1], GPIO.FALLING, bouncetime=200)
+    GPIO.add_event_callback(levelpins[1], boilerlevel_callback)
 
 
 if __name__ == "__main__":

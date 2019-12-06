@@ -62,22 +62,23 @@ def gameLoop():
     state = True
     btns = makebuttons()
     while state:
-        #   for event in pygame.event.get():
-        #   state = check()   if event.type ==pygame.QUIT:
-        #         gameExit = True
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                XGPIO.GPIO.cleanup()
+                quit()
 
         gameDisplay = pygame.display.set_mode((1002, 672))
         gameDisplay.fill(white)
         gameDisplay.blit(bg, (0, 0))
         Graphics.displaytemp(gameDisplay, XPhidgets.temp9)
-        print(XPhidgets.temp9)
+
         #need to create a multitimer to gettemp
         Graphics.displayphase(gameDisplay, "Test Environment")
         Graphics.displayheatersignal(gameDisplay, 50)
         checkbuttons(btns, gameDisplay)
         Graphics.changeGraphics(gameDisplay, components)
         pygame.display.update()
-        # time.sleep(10)
+
         clock.tick(30)
 
     def endgameLoop(self):

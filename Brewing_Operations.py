@@ -6,8 +6,6 @@ if GPIOActive == True:
 import Graphics
 import XPhidgets
 import Recipe
-import multitimer
-
 import time
 
 white = (255, 255, 255)
@@ -45,9 +43,11 @@ class Operation:
         state = True
 
         while state:
-            #   for event in pygame.event.get():
-            #   state = check()   if event.type ==pygame.QUIT:
-            #         gameExit = True
+            for event in pygame.event.get():
+                if event.type ==pygame.QUIT:
+                    XGPIO.GPIO.cleanup()
+                    quit()
+
 
             self.gameDisplay = pygame.display.set_mode((1002, 672))
             self.gameDisplay.fill(white)
@@ -66,7 +66,7 @@ class Operation:
             pygame.quit()
             quit()
 
-# need to energize hoppers and set initial valve position
+
 #SETUP
 Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
@@ -79,12 +79,8 @@ loadgametest()
 # HEAT TO STRIKE TEMPERATURE 1
 def endheat2strike(self):
     self.state = True
-    #XPhidgets.gettimedtemp()
-    #XPhidgets.gettemp3()
     temperature = XPhidgets.temp9
 
-    #temperature = XPhidgets.gettemp()
-    #self.temperature = temperature
     if temperature >= self.setpoint:
         #temptimer.stop()
         self.state = False
@@ -95,19 +91,19 @@ def endheat2strike(self):
 
 phase = "Heat to Strike"
 equipMent = [2, 6]  # BP and Heater
-stkTemp = Recipe[1]  # recipe is never called
+stkTemp = Recipe[1]
 heaterSignal = 100
 tempmode = True
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 tempmode = False
-#heat2strike.endgameLoop()
+
 
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if XGPIO.GPIO.event_detected(XGPIO.levelpins[0]) or XGPIO.GPIO.event_detected(XGPIO.levelpins[1]):
+    if XGPIO.GPIO.event_detected(XGPIO.levelpins[0]) or XGPIO.boilerlevel is False:
         self.state = False
         return self.state
     else:
@@ -125,7 +121,7 @@ fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
 #Mix
 
 def endmashmix(self):
-    #global gameLoop.gameDisplay
+
     self.state = True
     self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
     return self.state

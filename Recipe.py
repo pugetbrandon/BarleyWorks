@@ -52,8 +52,8 @@ def getrecipe():
     print(__name__)
     filterTime = 15 * 60  #need to check units
     recipelist.append(filterTime)
-    return recipelist
+    return recipelist #TODO  need to adjust the times from seconds to minutes before return
 
 def gettestrecipe():
-    recipelist = ['Test Recipe', 50, 150, 60, 5, 4, 3, 2, 70, 1]
+    recipelist = ['Test Recipe', 90, 150, 60, 5, 4, 3, 2, 70, 1]
     return recipelist

@@ -50,6 +50,7 @@ lineMaster.append([blue, [608, 440], [608, 489], lineSize])  #cooler
 def changeGraphics(gameDisplay, component):
     global degree
     global degreeb
+    tLines = []
     if component[0] is True and component[1] is False:
         tLines = [1, 3, 4, 5, 6, 7, 8, 9]
 
@@ -132,9 +133,7 @@ def displayphase(gameDisplay, phase):
 def displayheatersignal(gameDisplay, heatersignal):
     DefaultFont = None
     GameFont = pygame.font.Font(DefaultFont, 40)
-    print(heatersignal)
     GameText = str(heatersignal) + "%"
-    print("gametext", GameText)
     GamehtrSignalGraphic = GameFont.render(GameText, True, black)
     gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
 

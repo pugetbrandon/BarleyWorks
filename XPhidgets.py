@@ -1,7 +1,7 @@
 from Phidget22.PhidgetException import *
 from Phidget22.Phidget import *
 from Phidget22.Devices.TemperatureSensor import *
-
+import traceback
 # from Phidget22.EnumerationType import *
 from Phidget22.ThermocoupleType import *
 from Phidget22.Devices.VoltageOutput import *
@@ -20,11 +20,13 @@ def onAttachHandler(self):
     ch2.setDataInterval(1000)
     print("setTrigger")
 
-
+def onError(self, code, description):
+    print("Code: " + ErrorEventCode.getName(code))
+    print("Description: " + str(description))
+    print("----------")
 
 def onTemperatureChangeHandler(self, temperature):
 
-    print(temperature + 300)
     self.val = temperature * 9 / 5 + 32
     self.val = float(self.val)
 
@@ -34,33 +36,40 @@ def onTemperatureChangeHandler(self, temperature):
 
 
 def gettemp():
-    global temp9
-    ch2 = TemperatureSensor()
-    ch2.setDeviceSerialNumber(118651)
-    ch2.setChannel(0)
-    ch2.setOnAttachHandler(onAttachHandler)
+    try:
+        global temp9
+        ch2 = TemperatureSensor()
+        ch2.setDeviceSerialNumber(118651)
+        ch2.setChannel(0)
+        ch2.setOnAttachHandler(onAttachHandler)
 
-    #ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
-    ch2.openWaitForAttachment(5000)
-    temp9 = ch2.getTemperature() * 9 / 5 + 32
-    temp8 = temp9
-    #time.sleep(10)
-    print(temp9)
-    ch2.close()
+        #ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
+        ch2.openWaitForAttachment(5000)
+        temp9 = ch2.getTemperature() * 9 / 5 + 32
+        temp8 = temp9
+        ch2.close()
+        return temp8
 
-
-    return temp8
+    except PhidgetException as ex:
+        traceback.print_exc()
+        print("")
+        print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
 def gettemp3():
-    global temp9
-    ch2 = TemperatureSensor()
-    ch2.setDeviceSerialNumber(118651)
-    ch2.setChannel(0)
-    ch2.setOnAttachHandler(onAttachHandler)
-    ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
-    ch2.openWaitForAttachment(5000)
-    return ch2
-    #ch2.close()
+    try:
+        global temp9
+        ch2 = TemperatureSensor()
+        ch2.setDeviceSerialNumber(118651)
+        ch2.setChannel(0)
+        ch2.setOnAttachHandler(onAttachHandler)
+        ch2.setOnTemperatureChangeHandler(onTemperatureChangeHandler)
+        ch2.openWaitForAttachment(5000)
+        return ch2
+        #ch2.close()
+    except PhidgetException as ex:
+        traceback.print_exc()
+        print("")
+        print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
 def closetemp(self):
     ch2 = self
