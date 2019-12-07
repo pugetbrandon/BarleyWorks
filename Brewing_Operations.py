@@ -36,6 +36,7 @@ class Operation:
         else:
             self.components = [False, False, False, False, False, False, False, False, False, False, False, False]
         self.func = func
+
         XGPIO.setlevel_callback(self.level_callback)
         self.heaterSignal = heaterSignal
         self.tempmode = tempmode
@@ -43,7 +44,12 @@ class Operation:
         self.state = True
         self.gameLoop()
 
-    def level_callback(self):
+
+
+
+
+
+    def level_callback(self, VAL):
         self.components[10], self.components[11] = XGPIO.getlevel()
         XGPIO.setGPIO(self.components)
         if self.phase == "Mash":

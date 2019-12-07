@@ -2,7 +2,7 @@ import pygame
 import math
 import pygbutton
 import XPhidgets
-import XGPIO
+
 import time
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -55,7 +55,7 @@ def changeGraphics(gameDisplay, component):
     if component[0] is True and component[1] is False:
         tLines = [1, 3, 4, 5, 6, 7, 8, 9]
 
-    if component[0] is True and component[1] is True and component[3] is False:
+    if component[0] is True and component[1] is True: #and component[3] is False:
         tLines = [1, 3, 4, 5, 10, 11, 12]
 
     if component[2] is True and component[3] is False and component[4] is False:
@@ -97,7 +97,7 @@ def changeGraphics(gameDisplay, component):
         GameFont = pygame.font.Font(DefaultFont, 60)
         InterlockText = "Interlock"
         GameTempGraphic = GameFont.render(InterlockText, True, black)
-        gameDisplay.blit(GameTempGraphic, (575, 145))
+        gameDisplay.blit(GameTempGraphic, (562, 145))
 
     if component[7] is True:  # draw bitter hopper
         pygame.draw.rect(gameDisplay, blue, [555, 76, 23, 19])

@@ -53,7 +53,16 @@ def checkbuttons(buttons, gameDisplay):
                         components[i] = False
                     else:
                         components[i] = True
-                XGPIO.setGPIO2(components)
+                XGPIO.setGPIO(components)
+
+
+def level_callback(args):
+    global components
+    components[10], components[11] = XGPIO.getlevel()
+    XGPIO.setGPIO(components)
+
+
+
 
 def gameLoop():
     gameExit = False
@@ -74,7 +83,7 @@ def gameLoop():
 
         #need to create a multitimer to gettemp
         Graphics.displayphase(gameDisplay, "Test Environment")
-        Graphics.displayheatersignal(gameDisplay, 50)
+        Graphics.displayheatersignal(gameDisplay, components, 50)
         checkbuttons(btns, gameDisplay)
         Graphics.changeGraphics(gameDisplay, components)
         pygame.display.update()
@@ -88,6 +97,10 @@ def gameLoop():
 XGPIO.setup()
 loadgametest()
 channel = XPhidgets.gettemp3()
+L1, L2 = XGPIO.getlevel()
+components.append(L1)
+components.append(L2)
+XGPIO.setlevel_callback(level_callback)
 gameLoop()
 XPhidgets.closetemp(channel)
 
