@@ -88,9 +88,16 @@ def changeGraphics(gameDisplay, component):
 
     if component[5] is True:  # draw boiler valve
         pygame.draw.circle(gameDisplay, blue, [632, 423], 8)
-    print(component[6], XGPIO.interlock)
-    if component[6] is True and XGPIO.interlock is False:  # draw boiler valve
+
+    if component[6] is True and component[11] is True:  # draw boiler valve
         pygame.draw.circle(gameDisplay, blue, [642, 252], 8)
+
+    if component[6] is True and component[11] is False:
+        DefaultFont = None
+        GameFont = pygame.font.Font(DefaultFont, 60)
+        InterlockText = "Interlock"
+        GameTempGraphic = GameFont.render(InterlockText, True, black)
+        gameDisplay.blit(GameTempGraphic, (575, 145))
 
     if component[7] is True:  # draw bitter hopper
         pygame.draw.rect(gameDisplay, blue, [555, 76, 23, 19])
@@ -116,11 +123,11 @@ def changeGraphics(gameDisplay, component):
 
         degreeb -= 5
 
-    if XGPIO.Glevel[0] is True:  # draw mash level
+    if component[10] is True:  # draw mash level
         pygame.draw.circle(gameDisplay, blue, [287, 86], 8)
 
 
-    if XGPIO.Glevel[1] is True:  # draw boiler level
+    if component[11] is True:  # draw boiler level
         pygame.draw.circle(gameDisplay, blue, [731, 237], 8)
 
 def displaytemp(gameDisplay, temp):
@@ -138,8 +145,8 @@ def displayphase(gameDisplay, phase):
     PhaseTextGraphic = GameFont.render(phase, True, black)
     gameDisplay.blit(PhaseTextGraphic, (710, 36))
 
-def displayheatersignal(gameDisplay, heatersignal):
-    if XGPIO.interlock is False:
+def displayheatersignal(gameDisplay, components, heatersignal):
+    if components[11] is True:
         DefaultFont = None
         GameFont = pygame.font.Font(DefaultFont, 40)
         GameText = str(heatersignal) + "%"

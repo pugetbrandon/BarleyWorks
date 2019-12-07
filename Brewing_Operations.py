@@ -28,21 +28,45 @@ class Operation:
         self.setpoint = setpoint
         #self.gameDisplay = gameDisplay
         if GPIOActive:
-            self.components = XGPIO.setGPIO(self.equipMent)
+            self.components = XGPIO.buildcomponents(self.equipMent)
+            L1, L2 = XGPIO.getlevel()
+            self.components.append(L1)
+            self.components.append(L2)
+            XGPIO.setGPIO(self.components)
         else:
-            self.components = [False, False, False, False, False, False, False, False, False, False]
+            self.components = [False, False, False, False, False, False, False, False, False, False, False, False]
         self.func = func
+        XGPIO.setlevel_callback(self.level_callback)
         self.heaterSignal = heaterSignal
         self.tempmode = tempmode
         XPhidgets.setheatersignal(self.heaterSignal)
+        self.state = True
         self.gameLoop()
+
+    def level_callback(self):
+        self.components[10], self.components[11] = XGPIO.getlevel()
+        XGPIO.setGPIO(self.components)
+        if self.phase == "Mash":
+            self.levelcontrol()
+
+    def levelcontrol(self):
+        if self.components[11] is False and self.state is True:
+            self.components[2] = False
+            XGPIO.setGPIO(self.components)
+
+        if self.components[11] is True and self.state is True:
+            time.sleep(10)
+            self.components[2] = True
+            XGPIO.setGPIO(self.components)
+
+
 
     def gameLoop(self):
         gameExit = False
         clock = pygame.time.Clock()
-        state = True
 
-        while state:
+
+        while self.state:
             for event in pygame.event.get():
                 if event.type ==pygame.QUIT:
                     XGPIO.GPIO.cleanup()
@@ -52,11 +76,11 @@ class Operation:
             self.gameDisplay = pygame.display.set_mode((1002, 672))
             self.gameDisplay.fill(white)
             self.gameDisplay.blit(bg, (0, 0))
-            state = self.func(self)
+            self.state = self.func(self)
             Graphics.displayphase(self.gameDisplay, self.phase)
             if self.tempmode is True:
                 Graphics.displaytemp(self.gameDisplay, XPhidgets.temp9)
-                Graphics.displayheatersignal(self.gameDisplay, self.heaterSignal)
+                Graphics.displayheatersignal(self.gameDisplay, self.components, self.heaterSignal)
             Graphics.changeGraphics(self.gameDisplay, self.components)
             pygame.display.update()
             # time.sleep(10)
@@ -74,7 +98,6 @@ Recipe = Recipe.gettestrecipe()
 # Recipe = Recipe.getrecipe()
 if GPIOActive:
     XGPIO.setup()
-    XGPIO.getlevel()
 loadgametest()
 
 
@@ -106,7 +129,7 @@ tempmode = False
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if XGPIO.Glevel[0] is True or XGPIO.Glevel[1] is False:
+    if self.components[10] is True or self.components[11] is False:
         self.state = False
         return self.state
     else:

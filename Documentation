@@ -27,5 +27,9 @@ BCM
 # Flavorhopper  8   GPIO2    3
 # Aromahopper   9   GPIO25  22
 
+#Mash Level     10
+# Boiler Level  11
+
+
 Mash Level  GPIO19
 Boiler Level GPIO16
