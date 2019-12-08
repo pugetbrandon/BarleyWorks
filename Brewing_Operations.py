@@ -1,4 +1,4 @@
-GPIOActive = True
+GPIOActive = False
 import pygame
 if GPIOActive == True:
     import XGPIO
@@ -100,8 +100,8 @@ class Operation:
 
 
 #SETUP
-Recipe = Recipe.gettestrecipe()
-# Recipe = Recipe.getrecipe()
+#Recipe = Recipe.gettestrecipe()
+Recipe = Recipe.getrecipe()
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -212,5 +212,83 @@ heatctrlbtns = Graphics.makehtrctrlbtns()
 mashinfo = [mashtime, starttime, mashtemp, heatctrlbtns]
 mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
 
+#Ready to Transfer
 
+def endready2transfer(self):
+    self.state = True
+    self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
+    return self.state
+
+phase = "Ready to Transfer to Boiler"
+equipMent = []
+heaterSignal = 0
+tempmode = False
+ctrbtns = Graphics.makecontrolbutton("Ready to Transfer")
+ready2transfer = Operation(endready2transfer, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+
+#Transfer to Boiler
+
+def endtransfer2boiler(self):
+    self.state = True
+    self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
+    return self.state
+
+phase = "Transfer to Boiler"
+equipMent = [0, 1, 6]
+heaterSignal = 66
+tempmode = True
+ctrbtns = Graphics.makecontrolbutton("Ready to Transfer")
+transfer2boiler = Operation(endtransfer2boiler, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+
+#Heat to Boil
+def endheat2boil(self):
+    self.state = True
+    if len(self.setpoint) == 0:
+        startboil = time.time()
+        self.setpoint.append(XPhidgets.gettemp())
+        reset = False
+    if reset:
+        startboil = time.time()
+        reset = False
+    if startboil >= startboil + 1:
+        btemp = XPhidgets.gettemp()
+        self.setpoint.append(btemp)
+        if len(self.setpoint) >= 60:
+            del self.setpoint[0]
+            sum = 0
+            for i in range(len(self.setpoint)):
+                sum += self.setpoint[i]
+            average = sum / len(self.setpoint)
+            differ = btemp - average
+            if btemp > 205 and differ < 0.1:
+                self.state = False
+        reset = True
+
+    return self.state
+
+phase = "Heat to Boil"
+equipMent = [2, 6]
+heaterSignal = 66
+tempmode = True
+boiltemp = []
+heat2boil = Operation(endheat2boil, equipMent, boiltemp, heaterSignal, tempmode, phase)
+
+#Boil
+
+
+def endboil(self):
+    self.state = True
+    if time.time() >= (self.setpoint[0] + self.setpoint[1]):
+        self.state = False
+        return self.state
+    return self.state
+
+phase = "Boil"
+equipMent = [6]
+BoilTime = Recipe[9]
+heaterSignal = 0
+tempmode = False
+starttime = time.time()
+timerinfo = [filterTime, starttime]
+filtermash = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
 

@@ -50,8 +50,14 @@ def getrecipe():
         root.mainloop()
 
     print(__name__)
-    filterTime = 15 * 60  #need to check units
+    filterTime = 15  #need to check units
+    adjustlist = [3, 4, 5, 6, 7, 9]
+
     recipelist.append(filterTime)
+    print(recipelist)
+    for i in range(6):
+        recipelist[adjustlist[i]] = int(recipelist[adjustlist[i]]) * 60
+    print(recipelist)
     return recipelist #TODO  need to adjust the times from seconds to minutes before return
 
 def gettestrecipe():
