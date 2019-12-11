@@ -1,4 +1,4 @@
-GPIOActive = False
+GPIOActive = True
 import pygame
 if GPIOActive == True:
     import XGPIO
@@ -100,8 +100,8 @@ class Operation:
 
 
 #SETUP
-#Recipe = Recipe.gettestrecipe()
-Recipe = Recipe.getrecipe()
+Recipe = Recipe.gettestrecipe()
+#Recipe = Recipe.getrecipe()
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -210,7 +210,9 @@ starttime = time.time()
 mashtime = Recipe[3]
 heatctrlbtns = Graphics.makehtrctrlbtns()
 mashinfo = [mashtime, starttime, mashtemp, heatctrlbtns]
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
 
 #Ready to Transfer
 
@@ -237,21 +239,26 @@ phase = "Transfer to Boiler"
 equipMent = [0, 1, 6]
 heaterSignal = 66
 tempmode = True
-ctrbtns = Graphics.makecontrolbutton("Ready to Transfer")
+ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 transfer2boiler = Operation(endtransfer2boiler, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
 
 #Heat to Boil
 def endheat2boil(self):
     self.state = True
+    print(len(self.setpoint))
+    print(self.setpoint)
     if len(self.setpoint) == 0:
-        startboil = time.time()
+        self.startboil = time.time()
         self.setpoint.append(XPhidgets.gettemp())
-        reset = False
-    if reset:
-        startboil = time.time()
-        reset = False
-    if startboil >= startboil + 1:
-        btemp = XPhidgets.gettemp()
+        self.reset = False
+        self.startboil = time.time()
+    if self.reset:
+        self.startboil = time.time()
+        self.reset = False
+    if time.time() >= self.startboil + 1:
+        btemp = XPhidgets.temp9
         self.setpoint.append(btemp)
         if len(self.setpoint) >= 60:
             del self.setpoint[0]
@@ -262,7 +269,7 @@ def endheat2boil(self):
             differ = btemp - average
             if btemp > 205 and differ < 0.1:
                 self.state = False
-        reset = True
+        self.reset = True
 
     return self.state
 
@@ -271,7 +278,9 @@ equipMent = [2, 6]
 heaterSignal = 66
 tempmode = True
 boiltemp = []
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 heat2boil = Operation(endheat2boil, equipMent, boiltemp, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
 
 #Boil
 
@@ -290,5 +299,5 @@ heaterSignal = 0
 tempmode = False
 starttime = time.time()
 timerinfo = [filterTime, starttime]
-filtermash = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
+boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
 

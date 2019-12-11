@@ -124,7 +124,7 @@ def changeGraphics(gameDisplay, component):
         degreeb -= 5
 
     if component[10] is True:  # draw mash level
-        pygame.draw.circle(gameDisplay, blue, [287, 86], 8)
+        pygame.draw.circle(gameDisplay, blue, [287, 87], 8)
 
 
     if component[11] is True:  # draw boiler level
@@ -154,7 +154,7 @@ def displayheatersignal(gameDisplay, components, heatersignal):
         gameDisplay.blit(GamehtrSignalGraphic, (755, 270))
 
 def makecontrolbutton(btitle):
-    btncontrol = pygbutton.PygButton((60, 180, 110, 40), btitle)
+    btncontrol = pygbutton.PygButton((35, 180, 140, 40), btitle)
     return btncontrol
 
 def buttoncontrol(btncontrol, gameDisplay):  #single button controller

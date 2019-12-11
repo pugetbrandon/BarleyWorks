@@ -18,7 +18,7 @@ def onAttachHandler(self):
     ch2.setTemperatureChangeTrigger(0.5)
     ch2 .setThermocoupleType(ThermocoupleType.THERMOCOUPLE_TYPE_K)
     ch2.setDataInterval(1000)
-    print("setTrigger")
+
 
 def onError(self, code, description):
     print("Code: " + ErrorEventCode.getName(code))
