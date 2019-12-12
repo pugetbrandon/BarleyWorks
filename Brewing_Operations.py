@@ -1,4 +1,5 @@
 GPIOActive = True
+Test = True
 import pygame
 if GPIOActive == True:
     import XGPIO
@@ -100,8 +101,11 @@ class Operation:
 
 
 #SETUP
-Recipe = Recipe.gettestrecipe()
-#Recipe = Recipe.getrecipe()
+if Test:
+    Recipe = Recipe.gettestrecipe()
+else:
+    Recipe = Recipe.getrecipe()
+
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -221,6 +225,7 @@ def endready2transfer(self):
     self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
     return self.state
 
+
 phase = "Ready to Transfer to Boiler"
 equipMent = []
 heaterSignal = 0
@@ -267,7 +272,7 @@ def endheat2boil(self):
                 sum += self.setpoint[i]
             average = sum / len(self.setpoint)
             differ = btemp - average
-            if btemp > 205 and differ < 0.1:
+            if btemp > 75 and differ < 0.1:
                 self.state = False
         self.reset = True
 
@@ -287,17 +292,54 @@ XPhidgets.closetemp(channel)
 
 def endboil(self):
     self.state = True
-    if time.time() >= (self.setpoint[0] + self.setpoint[1]):
+
+    if time.time() >= self.setpoint[2] and self.components[7] is True:   #Bitter hops check
+        self.components[7] = False
+        XGPIO.setGPIO(self.components)
+
+    if time.time() >= self.setpoint[3] and self.components[8] is True:   #Flavor hops check
+        self.components[8] = False
+        XGPIO.setGPIO(self.components)
+
+    if time.time() >= self.setpoint[4] and self.components[9] is True:   #Aroma hops check
+        self.components[9] = False
+        XGPIO.setGPIO(self.components)
+
+    if time.time() >= self.setpoint[5] and self.components[2] is False:   #Turns on Boiler Pump for Sanitization
+        self.components[2] = True
+        XGPIO.setGPIO(self.components)
+
+    if time.time() >= self.setpoint[1]:
         self.state = False
         return self.state
     return self.state
 
 phase = "Boil"
 equipMent = [6]
-BoilTime = Recipe[9]
-heaterSignal = 0
-tempmode = False
 starttime = time.time()
-timerinfo = [filterTime, starttime]
+BoilTime = Recipe[4] + starttime
+BitterTimer = BoilTime - Recipe[5]
+FlavorTimer = BoilTime - Recipe[6]
+AromaTimer = BoilTime - Recipe[7]
+#SanTimer = BoilTime - 300
+SanTimer = BoilTime - 5
+heaterSignal = 66
+tempmode = False
+
+timerinfo = [starttime, BoilTime, BitterTimer, FlavorTimer, AromaTimer, SanTimer]
 boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
+
+def endcool2ferm(self):
+    if XPhidgets.temp9 <= self.setpoint:
+        self.components[5] = False
+        XGPIO.setGPIO(self.components)
+
+phase = "Cool to Fermentation Temperature"
+equipMent = [2, 5]
+heaterSignal = 0
+tempmode = True
+fermtemp = Recipe[8]
+
+boil = Operation(endcool2ferm, equipMent, fermtemp, heaterSignal, tempmode, phase)
+
 

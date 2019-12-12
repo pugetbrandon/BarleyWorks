@@ -61,5 +61,5 @@ def getrecipe():
     return recipelist #TODO  need to adjust the times from seconds to minutes before return
 
 def gettestrecipe():
-    recipelist = ['Test Recipe', 65, 150, 5, 5, 4, 3, 2, 70, 1]
+    recipelist = ['Test Recipe', 65, 150, 5, 30, 25, 15, 10, 70, 1]
     return recipelist
