@@ -330,16 +330,41 @@ timerinfo = [starttime, BoilTime, BitterTimer, FlavorTimer, AromaTimer, SanTimer
 boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
 
 def endcool2ferm(self):
-    if XPhidgets.temp9 <= self.setpoint:
+    self.state = True
+    if XPhidgets.temp9 <= self.setpoint[0] and self.setpoint[1] == 0:
+        self.setpoint[1] = 1
         self.components[5] = False
         XGPIO.setGPIO(self.components)
+        self.setpoint[3] = time.time() + 60
+
+    if self.setpoint[1] == 1 and time.time() >= self.setpoint[3] and XPhidgets.temp9 <= self.setpoint[0]:
+        self.state = False
+        return self.state
+
+    if self.setpoint[1] == 1 and time.time() >= self.setpoint[3] and XPhidgets.temp9 >= self.setpoint[0]:
+        cycletime = time.time() + 60
+        self.setpoint[1] = 2
+        self.components[5] = False
+        XGPIO.setGPIO(self.components)
+
+    if self.setpoint[1] == 2 and time.time() >= self.setpoint[3]:
+        self.setpoint[1] = 0
+        self.setpoint[2] += 1
+
+    if self.setpoint[2] >= 3:
+        self.state = False
+        return self.state
+    return self.state
+
+
+
 
 phase = "Cool to Fermentation Temperature"
 equipMent = [2, 5]
 heaterSignal = 0
 tempmode = True
-fermtemp = Recipe[8]
-
-boil = Operation(endcool2ferm, equipMent, fermtemp, heaterSignal, tempmode, phase)
-
+fermtemp = [Recipe[8], 0, 0, 0]  # ferm temperature
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
+cool2ferm = Operation(endcool2ferm, equipMent, fermtemp, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
 
