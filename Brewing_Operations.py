@@ -368,3 +368,30 @@ channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the c
 cool2ferm = Operation(endcool2ferm, equipMent, fermtemp, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 
+
+# Manual cool and prep for transfer
+
+def endcoolandprep(self):
+    self.state = True
+    self.state = Graphics.checkcoolbuttons(self.setpoint, self.gameDisplay, self.components)
+    return self.state
+
+phase = "Final Cool and Prep for Transfer"
+btitles = ("BP", "CV")
+bxy = []
+bxy.append([750, 465])
+bxy.append([605, 495])
+
+coolbuttons = Graphics.makecoolbuttons(bxy, btitles)
+ctrbtns = Graphics.makecontrolbutton("Start Transfer to Fermenter")
+coolbuttons.append(ctrbtns)
+
+equipMent = []
+heaterSignal = 0
+tempmode = True
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
+coolandprep = Operation(endcoolandprep, equipMent, coolbuttons, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
+
+
+

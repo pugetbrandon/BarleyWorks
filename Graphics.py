@@ -228,6 +228,39 @@ def heaterctrlbuttons(heatctrlbtns, gameDisplay, heaterSignal):
                 return heaterSignal
     return heaterSignal
 
+def makecoolbuttons(bxy, btitles):
+    buttons = []
+    for i in range(2):
+        buttons.append(pygbutton.PygButton((bxy[i][0], bxy[i][1], 60, 30), btitles[i]))
+    return buttons
+
+def checkcoolbuttons(buttons, gameDisplay, components):
+    state = True
+    for i in range(3):
+        buttons[i].draw(gameDisplay)
+    for event in pygame.event.get():  # event handling loop
+        if 'click' in buttons[0].handleEvent(event):
+            if components[2] is True:
+                components[2] = False
+            else:
+                components[2] = True
+            XGPIO.setGPIO(components)
+        if 'click' in buttons[1].handleEvent(event):
+            if components[5] is True:
+                components[5] = False
+            else:
+                components[5] = True
+            XGPIO.setGPIO(components)
+        if 'click' in buttons[2].handleEvent(event):
+            state = False
+            return state
+    return state
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
