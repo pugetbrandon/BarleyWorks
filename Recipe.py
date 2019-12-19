@@ -10,7 +10,12 @@ def getrecipe():
     fields = (
         'Recipe Name', 'Strike Temperature', 'Mash Temperature', 'Mash Time', 'Boil Time', 'Bitter Hopper',
         'Flavor Hopper',
-        'Aroma Hopper', 'Ferm Temperature')
+        'Aroma Hopper', 'Ferm Temperature', "Start Code")
+
+    phaseoptions = ("Heat to Strike", "Fill Mashtun", "Mix Mashtun", "Filter Mashtun", "Mash",
+                    "Ready to Transfer to Boiler",
+                    "Transfer to Boiler", "Heat to Boil", "Boil", "Cool to Fermentation Temperature",
+                    "Ready to Transfer to Fermenter", "Transfer to Boiler")
 
 
     def use_recipe(entries):
@@ -51,15 +56,15 @@ def getrecipe():
 
     print(__name__)
     filterTime = 15  #need to check units
-    adjustlist = [3, 4, 5, 6, 7, 9]
+    adjustlist = [3, 4, 5, 6, 7, 10]
 
     recipelist.append(filterTime)
     print(recipelist)
     for i in range(6):
         recipelist[adjustlist[i]] = int(recipelist[adjustlist[i]]) * 60
     print(recipelist)
-    return recipelist #TODO  need to adjust the times from seconds to minutes before return
+    return recipelist
 
 def gettestrecipe():
-    recipelist = ['Test Recipe', 65, 150, 5, 30, 25, 15, 10, 70, 1]
+    recipelist = ['Test Recipe', 65, 150, 5, 30, 25, 15, 10, 70, 0, 1]
     return recipelist
