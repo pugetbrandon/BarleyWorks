@@ -1,5 +1,5 @@
 GPIOActive = True
-Test = True
+Test = False
 
 
 import pygame
@@ -107,7 +107,7 @@ if Test:
     Recipe = Recipe.gettestrecipe()
 else:
     Recipe = Recipe.getrecipe()
-SP = Recipe[9]   #Starting phase
+SP = int(Recipe[9])   #Starting phase
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -261,8 +261,6 @@ XPhidgets.closetemp(channel)
 #Heat to Boil
 def endheat2boil(self):
     self.state = True
-    print(len(self.setpoint))
-    print(self.setpoint)
     if len(self.setpoint) == 0:
         self.startboil = time.time()
         self.setpoint.append(XPhidgets.gettemp())
@@ -380,7 +378,7 @@ def endtransfer2ferm(self):
     return self.state
 
 phase = "Transfer to Boiler"
-equipMent = [2, 5]
+equipMent = [2, 4, 5]
 heaterSignal = 0
 tempmode = False
 ctrbtns = Graphics.makecontrolbutton("Transfer Complete")

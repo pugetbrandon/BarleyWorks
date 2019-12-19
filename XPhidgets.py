@@ -74,7 +74,7 @@ def gettemp3():
 def closetemp(self):
     ch2 = self
     ch2.close()
-    print("closed")
+
 
 
 
