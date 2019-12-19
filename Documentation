@@ -31,5 +31,19 @@ BCM
 # Boiler Level  11
 
 
+ 0  Heat to Strike
+ 1  Fill Mashtun
+ 2  Mix Mashtun
+ 3  Filter Mashtun
+ 4  Mash
+ 5  Ready to Transfer to Boiler
+ 6  Transfer to Boiler
+ 7  Heat to Boil
+ 8  Boil
+ 9  Cool to Fermentation Temperature
+ 10 Ready to Transfer to Fermenter
+ 11 Transfer to Boiler
+
+
 Mash Level  GPIO19
 Boiler Level GPIO16

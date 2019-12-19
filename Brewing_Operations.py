@@ -1,5 +1,7 @@
 GPIOActive = True
 Test = True
+
+
 import pygame
 if GPIOActive == True:
     import XGPIO
@@ -105,7 +107,7 @@ if Test:
     Recipe = Recipe.gettestrecipe()
 else:
     Recipe = Recipe.getrecipe()
-
+SP = Recipe[9]   #Starting phase
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -131,7 +133,8 @@ stkTemp = Recipe[1]
 heaterSignal = 100
 tempmode = True
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
-heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
+if SP <= 0:
+    heat2strike = Operation(endheat2strike, equipMent, stkTemp, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 tempmode = False
 
@@ -150,7 +153,8 @@ equipMent = [2, 3]
 
 heaterSignal = 0
 tempmode = False
-fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
+if SP <= 1:
+    fillmash = Operation(endfillmash, equipMent, 0, heaterSignal, tempmode, phase)
 
 #Mix
 
@@ -167,7 +171,8 @@ equipMent = []
 heaterSignal = 0
 tempmode = False
 ctrbtns = Graphics.makecontrolbutton("Mix Complete")
-mixmash = Operation(endmashmix, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+if SP <= 2:
+    mixmash = Operation(endmashmix, equipMent, ctrbtns, heaterSignal, tempmode, phase)
 
 
 # Filter
@@ -181,12 +186,13 @@ def endfiltermash(self):
 
 phase = "Filter Mashtun"
 equipMent = [0]
-filterTime = Recipe[9]
+filterTime = Recipe[10]
 heaterSignal = 0
 tempmode = False
 starttime = time.time()
 timerinfo = [filterTime, starttime]
-filtermash = Operation(endfiltermash, equipMent, timerinfo, heaterSignal, tempmode, phase)
+if SP <= 3:
+    filtermash = Operation(endfiltermash, equipMent, timerinfo, heaterSignal, tempmode, phase)
 
 # Mash
 def endmash(self):
@@ -215,7 +221,8 @@ mashtime = Recipe[3]
 heatctrlbtns = Graphics.makehtrctrlbtns()
 mashinfo = [mashtime, starttime, mashtemp, heatctrlbtns]
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
-mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
+if SP <= 4:
+    mash = Operation(endmash, equipMent, mashinfo, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 
 #Ready to Transfer
@@ -231,7 +238,8 @@ equipMent = []
 heaterSignal = 0
 tempmode = False
 ctrbtns = Graphics.makecontrolbutton("Ready to Transfer")
-ready2transfer = Operation(endready2transfer, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+if SP <= 5:
+    ready2transfer = Operation(endready2transfer, equipMent, ctrbtns, heaterSignal, tempmode, phase)
 
 #Transfer to Boiler
 
@@ -246,7 +254,8 @@ heaterSignal = 66
 tempmode = True
 ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
-transfer2boiler = Operation(endtransfer2boiler, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+if SP <= 6:
+    transfer2boiler = Operation(endtransfer2boiler, equipMent, ctrbtns, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 
 #Heat to Boil
@@ -284,7 +293,8 @@ heaterSignal = 66
 tempmode = True
 boiltemp = []
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
-heat2boil = Operation(endheat2boil, equipMent, boiltemp, heaterSignal, tempmode, phase)
+if SP <= 7:
+    heat2boil = Operation(endheat2boil, equipMent, boiltemp, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
 
 #Boil
@@ -327,8 +337,60 @@ heaterSignal = 66
 tempmode = False
 
 timerinfo = [starttime, BoilTime, BitterTimer, FlavorTimer, AromaTimer, SanTimer]
-boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
+if SP <= 8:
+    boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
 
+def endcool2ferm(self):
+    self.state = True
+    if XPhidgets.temp9 <= self.setpoint:
+        self.state = False
+    return self.state
+
+phase = "Cool to Fermentation Temperature"
+equipMent = [2, 5]
+heaterSignal = 0
+tempmode = True
+fermtemp = Recipe[8]  # ferm temperature
+channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
+if SP <= 9:
+    cool2ferm = Operation(endcool2ferm, equipMent, fermtemp, heaterSignal, tempmode, phase)
+XPhidgets.closetemp(channel)
+
+#Ready to transfer to fermenter
+
+def endstarttransfer2ferm(self):
+    self.state = True
+    self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
+    return self.state
+
+
+phase = "Ready to Transfer to Fermenter"
+equipMent = []
+heaterSignal = 0
+tempmode = False
+ctrbtns = Graphics.makecontrolbutton("Ready to Transfer")
+if SP <= 10:
+    endstarttransfer2ferm = Operation(endstarttransfer2ferm, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+
+#End transfer to fermenter
+
+def endtransfer2ferm(self):
+    self.state = True
+    self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
+    return self.state
+
+phase = "Transfer to Boiler"
+equipMent = [2, 5]
+heaterSignal = 0
+tempmode = False
+ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
+if SP <= 11:
+    transfer2ferm = Operation(endtransfer2ferm, equipMent, ctrbtns, heaterSignal, tempmode, phase)
+
+
+
+
+'''
 def endcool2ferm(self):
     self.state = True
     if XPhidgets.temp9 <= self.setpoint[0] and self.setpoint[1] == 0:
@@ -392,6 +454,6 @@ tempmode = True
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 coolandprep = Operation(endcoolandprep, equipMent, coolbuttons, heaterSignal, tempmode, phase)
 XPhidgets.closetemp(channel)
-
+'''
 
 
