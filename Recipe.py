@@ -69,5 +69,5 @@ def getrecipe():
     return recipelist
 
 def gettestrecipe():
-    recipelist = ['Test Recipe', 65, 150, 5, 30, 25, 15, 10, 70, 0, 1]
+    recipelist = ['Test Recipe', 75, 150, 5, 30, 25, 15, 10, 70, 0, 20]
     return recipelist

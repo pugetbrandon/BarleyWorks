@@ -53,7 +53,7 @@ def checkbuttons(buttons, gameDisplay):
                         components[i] = False
                     else:
                         components[i] = True
-                    XGPIO.setGPIO(components)   
+                    XGPIO.setGPIO(components)
 
 
 def level_callback(args):

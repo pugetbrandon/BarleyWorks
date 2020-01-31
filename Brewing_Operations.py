@@ -1,5 +1,5 @@
 GPIOActive = True
-Test = False
+Test = True
 
 
 import pygame
