@@ -23,7 +23,7 @@ BCM
 # Ferm Valve    4   GPIO8   24,  11
 # Cooler Valve  5   GPIO7   26,  9
 # Heater        6   GPIO22  15,  3
-# Bitterhopper  7   GPIO12  32,  15
+# Bitterhopper  7   GPIO16  36,  15
 # Flavorhopper  8   GPIO2    3, 13
 # Aromahopper   9   GPIO25  22,  23
 
@@ -47,5 +47,5 @@ BCM
  11 Transfer to Boiler
 
 
-Mash Level  GPIO19,  35
-Boiler Level GPIO16,  36
+Mash Level  GPIO14, 8
+Boiler Level GPIO15,  10

@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 
 
 
-pins = (1, 5, 26, 24, 8, 7, 22, 12, 2, 25)   #Not actually Pins, GPIO
+pins = (1, 5, 26, 24, 8, 7, 22, 16, 2, 25)   #Not actually Pins, GPIO
 levelpins = (14, 15)  # Mash level is position 0, boiler level is position 1
 
 
