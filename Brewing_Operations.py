@@ -39,12 +39,12 @@ class Operation:
         else:
             self.components = [False, False, False, False, False, False, False, False, False, False, False, False]
         self.func = func
-
+        self.state = True
         XGPIO.setlevel_callback(self.level_callback)
         self.heaterSignal = heaterSignal
         self.tempmode = tempmode
         XPhidgets.setheatersignal(self.heaterSignal)
-        self.state = True
+        
         self.gameLoop()
 
 
