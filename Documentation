@@ -15,12 +15,12 @@ recipelist[9]   filterTime
 
 GPIOs
 BCM
-# Component, list position, GPIO, pin, Transitor Pin
+# Component, list position, GPIO, pin,
 # Mashpump      0   GPIO1   28,  17
 # Mashvalve     1   GPIO5   29,  7
 # Boiler Pump   2   GPIO26  37,  19
-# Boiler Valve  3   GPIO24  18,  5
-# Ferm Valve    4   GPIO8   24,  11
+# Boiler Valve  3   GPIO8  24,  5
+# Ferm Valve    4   GPIO20   38,  11
 # Cooler Valve  5   GPIO7   26,  9
 # Heater        6   GPIO22  15,  3
 # Bitterhopper  7   GPIO16  36,  15

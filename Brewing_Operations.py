@@ -130,7 +130,7 @@ def endheat2strike(self):
 phase = "Heat to Strike"
 equipMent = [2, 6]  # BP and Heater
 stkTemp = Recipe[1]
-heaterSignal = 100
+heaterSignal = 90
 tempmode = True
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 if SP <= 0:
@@ -250,7 +250,7 @@ def endtransfer2boiler(self):
 
 phase = "Transfer to Boiler"
 equipMent = [0, 1, 6]
-heaterSignal = 66
+heaterSignal = 90
 tempmode = True
 ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
@@ -279,7 +279,7 @@ def endheat2boil(self):
                 sum += self.setpoint[i]
             average = sum / len(self.setpoint)
             differ = btemp - average
-            if btemp > 75 and differ < 0.1:
+            if btemp > 206 and differ < 0.1:
                 self.state = False
         self.reset = True
 
@@ -287,7 +287,7 @@ def endheat2boil(self):
 
 phase = "Heat to Boil"
 equipMent = [2, 6]
-heaterSignal = 66
+heaterSignal = 90
 tempmode = True
 boiltemp = []
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later

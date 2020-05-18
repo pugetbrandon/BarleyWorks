@@ -91,6 +91,7 @@ def setheatersignal(heatersignal):
     voltout = heatersignal / 100 * 5.0
     if voltout >= 0 and voltout <= 5.0:
         voltageOutput0.setVoltage(voltout)
+        print(voltout)
 
 
 

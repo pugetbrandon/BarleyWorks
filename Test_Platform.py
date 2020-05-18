@@ -54,6 +54,11 @@ def checkbuttons(buttons, gameDisplay):
                     else:
                         components[i] = True
                     XGPIO.setGPIO(components)
+                    if i == 6 and components[6] is True:
+                        XPhidgets.setheatersignal(75)
+                        print("heatersignal set to 75")
+                    else:
+                        XPhidgets.setheatersignal(0)
 
 
 def level_callback(args):
