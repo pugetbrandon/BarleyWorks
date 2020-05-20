@@ -61,12 +61,14 @@ class Operation:
     def levelcontrol(self):
         if self.components[11] is False and self.state is True:
             self.components[2] = False
+            self.recovery = True
             XGPIO.setGPIO(self.components)
 
-        if self.components[11] is True and self.state is True:
+        if self.components[11] is True and self.state is True and self.recovery is True:
             time.sleep(10)
             self.components[2] = True
             XGPIO.setGPIO(self.components)
+            self.recovery = False
 
 
 
@@ -204,6 +206,7 @@ def endmash(self):
     
     if time.time() >= (mashtime + starttime):
         self.state = False
+        time.sleep(11)  #ensures that the level control delays finish before this operation completes
         return self.state
     else:
         self.state = True
