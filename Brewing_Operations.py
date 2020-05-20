@@ -29,6 +29,8 @@ class Operation:
         self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
+        if phase == 'Mash':
+            self.recovery = False
         #self.gameDisplay = gameDisplay
         if GPIOActive:
             self.components = XGPIO.buildcomponents(self.equipMent)
@@ -113,6 +115,8 @@ SP = int(Recipe[9])   #Starting phase
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
+SP=3
+
 
 
 
