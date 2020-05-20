@@ -74,7 +74,7 @@ def gettemp3():
 def closetemp(self):
     ch2 = self
     ch2.close()
-    print("closed")
+
 
 
 
@@ -91,6 +91,7 @@ def setheatersignal(heatersignal):
     voltout = heatersignal / 100 * 5.0
     if voltout >= 0 and voltout <= 5.0:
         voltageOutput0.setVoltage(voltout)
+        print(voltout)
 
 
 

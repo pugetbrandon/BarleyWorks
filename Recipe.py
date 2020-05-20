@@ -12,11 +12,12 @@ def getrecipe():
         'Flavor Hopper',
         'Aroma Hopper', 'Ferm Temperature', "Start Code")
 
+    '''
     phaseoptions = ("Heat to Strike", "Fill Mashtun", "Mix Mashtun", "Filter Mashtun", "Mash",
                     "Ready to Transfer to Boiler",
                     "Transfer to Boiler", "Heat to Boil", "Boil", "Cool to Fermentation Temperature",
                     "Ready to Transfer to Fermenter", "Transfer to Boiler")
-
+    '''
 
     def use_recipe(entries):
 
@@ -26,7 +27,6 @@ def getrecipe():
             value = (entries[field].get())
             recipelist.append(value)
 
-        print("in recipe file ", recipelist)
 
     def makeform(root, fields):
         entries = {}
@@ -59,12 +59,15 @@ def getrecipe():
     adjustlist = [3, 4, 5, 6, 7, 10]
 
     recipelist.append(filterTime)
-    print(recipelist)
     for i in range(6):
         recipelist[adjustlist[i]] = int(recipelist[adjustlist[i]]) * 60
-    print(recipelist)
+    recipelist[1] = int(recipelist[1])
+    recipelist[2] = int(recipelist[2])
+    recipelist[8] = int(recipelist[8])
+
+
     return recipelist
 
 def gettestrecipe():
-    recipelist = ['Test Recipe', 65, 150, 5, 30, 25, 15, 10, 70, 0, 1]
+    recipelist = ['Test Recipe', 100, 90, 5, 30, 25, 15, 10, 70, 0, 20]
     return recipelist

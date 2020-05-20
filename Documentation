@@ -15,17 +15,19 @@ recipelist[9]   filterTime
 
 GPIOs
 BCM
-# Component, list position, pin, GPIO
-# Mashpump      0   GPIO1   28
-# Mashvalve     1   GPIO5   29
-# Boiler Pump   2   GPIO26  37
-# Boiler Valve  3   GPIO24  18
-# Ferm Valve    4   GPIO8   24
-# Cooler Valve  5   GPIO7   26
-# Heater        6   GPIO22  15
-# Bitterhopper  7   GPIO12  32
-# Flavorhopper  8   GPIO2    3
-# Aromahopper   9   GPIO25  22
+# Component, list position, GPIO, pin,
+# Mashpump      0   GPIO1   28,  17
+# Mashvalve     1   GPIO5   29,  7
+# Boiler Pump   2   GPIO26  37,  19
+# Boiler Valve  3   GPIO8  24,  5
+# Ferm Valve    4   GPIO20   38,  11
+# Cooler Valve  5   GPIO7   26,  9
+# Heater        6   GPIO22  15,  3
+# Bitterhopper  7   GPIO16  36,  15
+# Flavorhopper  8   GPIO2    3, 13
+# Aromahopper   9   GPIO25  22,  23
+
+#External 120 OUtlet, GPIO3, 5, 21
 
 
 
@@ -47,5 +49,5 @@ BCM
  11 Transfer to Boiler
 
 
-Mash Level  GPIO19
-Boiler Level GPIO16
+Mash Level  GPIO14, 8
+Boiler Level GPIO15,  10

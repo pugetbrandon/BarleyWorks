@@ -107,7 +107,7 @@ if Test:
     Recipe = Recipe.gettestrecipe()
 else:
     Recipe = Recipe.getrecipe()
-SP = Recipe[9]   #Starting phase
+SP = int(Recipe[9])   #Starting phase
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -130,7 +130,7 @@ def endheat2strike(self):
 phase = "Heat to Strike"
 equipMent = [2, 6]  # BP and Heater
 stkTemp = Recipe[1]
-heaterSignal = 100
+heaterSignal = 90
 tempmode = True
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
 if SP <= 0:
@@ -250,7 +250,7 @@ def endtransfer2boiler(self):
 
 phase = "Transfer to Boiler"
 equipMent = [0, 1, 6]
-heaterSignal = 66
+heaterSignal = 90
 tempmode = True
 ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
@@ -261,8 +261,6 @@ XPhidgets.closetemp(channel)
 #Heat to Boil
 def endheat2boil(self):
     self.state = True
-    print(len(self.setpoint))
-    print(self.setpoint)
     if len(self.setpoint) == 0:
         self.startboil = time.time()
         self.setpoint.append(XPhidgets.gettemp())
@@ -281,7 +279,7 @@ def endheat2boil(self):
                 sum += self.setpoint[i]
             average = sum / len(self.setpoint)
             differ = btemp - average
-            if btemp > 75 and differ < 0.1:
+            if btemp > 206 and differ < 0.1:
                 self.state = False
         self.reset = True
 
@@ -289,7 +287,7 @@ def endheat2boil(self):
 
 phase = "Heat to Boil"
 equipMent = [2, 6]
-heaterSignal = 66
+heaterSignal = 90
 tempmode = True
 boiltemp = []
 channel = XPhidgets.gettemp3()  #starts temperature event handler, returns the channel so it can be closed later
@@ -380,7 +378,7 @@ def endtransfer2ferm(self):
     return self.state
 
 phase = "Transfer to Boiler"
-equipMent = [2, 5]
+equipMent = [2, 4, 5]
 heaterSignal = 0
 tempmode = False
 ctrbtns = Graphics.makecontrolbutton("Transfer Complete")
