@@ -210,7 +210,7 @@ def endmash(self):
     
     if time.time() >= (mashtime + starttime):
         self.state = False
-        time.sleep(11)  #ensures that the level control delays finish before this operation completes
+        #time.sleep(11)  #ensures that the level control delays finish before this operation completes
         return self.state
     else:
         self.state = True
@@ -384,7 +384,7 @@ def endtransfer2ferm(self):
     self.state = Graphics.buttoncontrol(self.setpoint, self.gameDisplay)
     return self.state
 
-phase = "Transfer to Boiler"
+phase = "Transfer to Ferm"
 equipMent = [2, 4, 5]
 heaterSignal = 0
 tempmode = False
