@@ -44,7 +44,7 @@ def makebuttons():
     return buttons
 
 def checkbuttons(buttons, gameDisplay):
-    for i in range(10):
+    for i in range(10):    #todo seems like an error here with two i variables
         buttons[i].draw(gameDisplay)
         for event in pygame.event.get():  # event handling loop
             for i in range(10):

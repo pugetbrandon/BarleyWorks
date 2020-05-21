@@ -46,6 +46,8 @@ def setlevel_callback(callback):
     for i in range(2):
         GPIO.remove_event_detect(levelpins[i])
         GPIO.add_event_detect(levelpins[i], GPIO.BOTH, callback, bouncetime=200)
+
+    print("XGPIO Callback set")
     #GPIO.add_event_callback(levelpins[1], interlock_callback)
     #GPIO.add_event_callback(levelpins[1], levelupdater_callback)
     #GPIO.add_event_detect(levelpins[0], GPIO.BOTH, callback, bouncetime=200)
