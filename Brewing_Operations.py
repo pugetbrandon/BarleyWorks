@@ -62,11 +62,15 @@ class Operation:
         if self.components[11] is False and self.state is True:
             self.components[2] = False
             self.recovery = True
+            self.x = self.x + 1
+            print("X ", self.x)
             XGPIO.setGPIO(self.components)
 
         if self.components[11] is True and self.state is True and self.recovery is True:
-            time.sleep(10)
+            #time.sleep(10)
             self.components[2] = True
+            self.y = self.y + 1
+            print("Y ", self.y)
             XGPIO.setGPIO(self.components)
             self.recovery = False
 
@@ -266,7 +270,7 @@ def endheat2boil(self):
     self.state = True
     if len(self.setpoint) == 0:
         self.startboil = time.time()
-        self.setpoint.append(XPhidgets.gettemp())
+        self.setpoint.append(XPhidgets.temp9)
         self.reset = False
         self.startboil = time.time()
     if self.reset:
