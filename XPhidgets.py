@@ -34,7 +34,7 @@ def onTemperatureChangeHandler(self, temperature):
     temp9 = self.val
 
 
-
+'''
 def gettemp():
     try:
         global temp9
@@ -54,6 +54,8 @@ def gettemp():
         traceback.print_exc()
         print("")
         print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
+
+'''
 
 def gettemp3():
     try:

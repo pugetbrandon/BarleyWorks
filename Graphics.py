@@ -2,6 +2,7 @@ import pygame
 import math
 import pygbutton
 import XPhidgets
+import XGPIO
 
 import time
 white = (255, 255, 255)
@@ -123,7 +124,7 @@ def changeGraphics(gameDisplay, component):
 
         degreeb -= 5
 
-    if component[10] is True:  # draw mash level
+    if component[10] is False:  # draw mash level
         pygame.draw.circle(gameDisplay, blue, [287, 87], 8)
 
 

@@ -46,7 +46,8 @@ class Operation:
         self.heaterSignal = heaterSignal
         self.tempmode = tempmode
         XPhidgets.setheatersignal(self.heaterSignal)
-        
+        self.x = 0
+        self.y = 0
         self.gameLoop()
 
 
@@ -69,7 +70,7 @@ class Operation:
             XGPIO.setGPIO(self.components)
 
         if self.components[11] is True and self.state is True and self.recovery is True:
-            #time.sleep(10)
+            time.sleep(10)
             self.components[2] = True
             self.y = self.y + 1
             print("Y ", self.y)
@@ -152,7 +153,7 @@ tempmode = False
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if self.components[10] is True or self.components[11] is False:
+    if self.components[10] is False or self.components[11] is False:
         self.state = False
         return self.state
     else:
