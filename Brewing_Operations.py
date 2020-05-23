@@ -120,7 +120,7 @@ SP = int(Recipe[9])   #Starting phase
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
-SP=3
+
 
 
 
@@ -153,7 +153,8 @@ tempmode = False
 # Transfer to Mash Tun
 def endfillmash(self):
     self.state = True
-    if self.components[10] is False or self.components[11] is False:
+    #if self.components[10] is False or self.components[11] is False:
+    if self.components[11] is False:
         self.state = False
         return self.state
     else:
@@ -178,7 +179,7 @@ def endmashmix(self):
 
 
 phase = "Mix Mashtun"
-equipMent = []
+equipMent = [0]
 heaterSignal = 0
 tempmode = False
 ctrbtns = Graphics.makecontrolbutton("Mix Complete")
