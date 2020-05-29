@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 #modifyig ferm valve and boiler value due to failed motor on boiler valve
 pins = (1, 5, 26, 8, 20, 7, 22, 16, 2, 25)   #Not actually Pins, GPIO
-levelpins = (14, 23)  # Mash level is position 0, boiler level is position 1
+levelpins = (14, 12)  # Mash level is position 0, boiler level is position 1
 
 
 

@@ -29,8 +29,7 @@ class Operation:
         self.phase = phase
         self.equipMent = equipMent
         self.setpoint = setpoint
-        if phase == 'Mash':
-            self.recovery = False
+
         #self.gameDisplay = gameDisplay
         if GPIOActive:
             self.components = XGPIO.buildcomponents(self.equipMent)
@@ -42,7 +41,12 @@ class Operation:
             self.components = [False, False, False, False, False, False, False, False, False, False, False, False]
         self.func = func
         self.state = True
+
+        if phase == 'Mash':
+            self.recovery = False
+            self.level_callback(self)
         XGPIO.setlevel_callback(self.level_callback)
+
         self.heaterSignal = heaterSignal
         self.tempmode = tempmode
         XPhidgets.setheatersignal(self.heaterSignal)
@@ -55,7 +59,7 @@ class Operation:
 
 
 
-    def level_callback(self, VAL):
+    def level_callback(self, VAL):  #i don't understand why I need VAL but its needed.
         self.components[10], self.components[11] = XGPIO.getlevel()
         XGPIO.setGPIO(self.components)
         if self.phase == "Mash":
@@ -65,15 +69,11 @@ class Operation:
         if self.components[11] is False and self.state is True:
             self.components[2] = False
             self.recovery = True
-            self.x = self.x + 1
-            print("X ", self.x)
             XGPIO.setGPIO(self.components)
 
         if self.components[11] is True and self.state is True and self.recovery is True:
             time.sleep(10)
             self.components[2] = True
-            self.y = self.y + 1
-            print("Y ", self.y)
             XGPIO.setGPIO(self.components)
             self.recovery = False
 
@@ -117,6 +117,7 @@ if Test:
 else:
     Recipe = Recipe.getrecipe()
 SP = int(Recipe[9])   #Starting phase
+SP = 8 # set SP here if you are running the test recipe.
 if GPIOActive:
     XGPIO.setup()
 loadgametest()
@@ -292,7 +293,7 @@ def endheat2boil(self):
                 sum += self.setpoint[i]
             average = sum / len(self.setpoint)
             differ = btemp - average
-            if btemp > 206 and differ < 0.1:
+            if btemp > 205 and differ < 0.1:
                 self.state = False
         self.reset = True
 
@@ -313,6 +314,10 @@ XPhidgets.closetemp(channel)
 
 def endboil(self):
     self.state = True
+
+    heatctrlbtns = self.setpoint[6]
+    self.heaterSignal = Graphics.heaterctrlbuttons(heatctrlbtns, self.gameDisplay, self.heaterSignal)
+
 
     if time.time() >= self.setpoint[2] and self.components[7] is True:   #Bitter hops check
         self.components[7] = False
@@ -345,9 +350,9 @@ AromaTimer = BoilTime - Recipe[7]
 #SanTimer = BoilTime - 300
 SanTimer = BoilTime - 5
 heaterSignal = 66
-tempmode = False
-
-timerinfo = [starttime, BoilTime, BitterTimer, FlavorTimer, AromaTimer, SanTimer]
+tempmode = True
+heatctrlbtns = Graphics.makehtrctrlbtns()
+timerinfo = [starttime, BoilTime, BitterTimer, FlavorTimer, AromaTimer, SanTimer, heatctrlbtns]
 if SP <= 8:
     boil = Operation(endboil, equipMent, timerinfo, heaterSignal, tempmode, phase)
 
